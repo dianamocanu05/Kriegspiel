@@ -7,9 +7,12 @@ public class Constants {
     private static final int HEIGHT = 675;
     private static final int WIDTH = 1200;
     private static final String backgroundImg = "file:media/background.jpg";
+    private static final String aboutImg = "file:media/soldier.jpg";
+    private static final String borodinoMap = "file:media/borodino-map.jpg";
     private static final String audio1 = "media/audio1.mp3";
-    private static final String audio2 = "";
+    private static final String audio2 = "media/audio2.mp3";
     private static final Font font = Font.font("Stencil", FontWeight.BOLD, 36);
+    private static final Font littleFont = Font.font("Stencil", FontWeight.BOLD, 12);
 
     public static int getHeight(){
         return HEIGHT;
@@ -24,6 +27,10 @@ public class Constants {
         return backgroundImg;
     }
 
+    public static String getAboutImg() {
+        return aboutImg;
+    }
+
     public static String getAudio1() {
         return audio1;
     }
@@ -34,5 +41,13 @@ public class Constants {
 
     public static Font getFont(){
         return font;
+    }
+
+    public static Font getLittleFont(){
+        return littleFont;
+    }
+
+    public static String getBorodinoMap(){
+        return borodinoMap;
     }
 }

@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaView;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -23,7 +24,6 @@ import java.io.File;
 import org.example.Constants;
 
 public class GameInterface {
-    private StackPane stackPane;
     private Stage stage;
 
     public GameInterface(Stage stage){
@@ -34,7 +34,7 @@ public class GameInterface {
     }
 
     public void initScreen(){
-        stackPane = new StackPane();
+        StackPane stackPane = new StackPane();
         playMusic(stackPane, Constants.getAudio1());
         addImage(stackPane, Constants.getBackgroundImg());
         VBox vbox = new VBox();
@@ -82,10 +82,21 @@ public class GameInterface {
         return button;
     }
 
+    public static Button addButton(StackPane stackPane, String text, Stage stage, int height, int width, Font font){
+        Button button = new Button(text);
+        button.setPrefSize(height,width);
+        button.setText(text);
+        button.setFont(font);
+        button.setStyle("-fx-background-color: #E7B557;");
+        addMouseListener(button, text, stage);
+        return button;
+    }
+
     public static void  addMouseListener(Node node, String text, Stage stage){
         node.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                stage.close();
                 switch (text) {
                     case "Play":
                         gameInterface(stage);
@@ -96,15 +107,19 @@ public class GameInterface {
                     case "About":
                         aboutInterface(stage);
                         break;
+                    case "Back":
+                        new GameInterface(stage).initialize();
+                        break;
                 }
             }
         });
     }
 
     public static void gameInterface(Stage stage){
-        stage.close();
-        stage.setFullScreen(true);
-        stage.setScene(new Scene(new StackPane()));
+        StackPane stackPane = new StackPane();
+        addImage(stackPane,Constants.getBorodinoMap());
+        playMusic(stackPane, Constants.getAudio2());
+        stage.setScene(new Scene(stackPane));
         stage.show();
     }
 
@@ -113,9 +128,15 @@ public class GameInterface {
     }
 
     public static void aboutInterface(Stage stage){
-        stage.close();
-        stage.setFullScreen(true);
-        stage.setScene(new Scene(new StackPane()));
+        StackPane stackPane = new StackPane();
+        addImage(stackPane,Constants.getAboutImg());
+        playMusic(stackPane, Constants.getAudio1());
+        Button back = addButton(stackPane,"Back",stage,100,5,Constants.getLittleFont());
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.BOTTOM_RIGHT);
+        hBox.getChildren().add(back);
+        stackPane.getChildren().add(hBox);
+        stage.setScene(new Scene(stackPane));
         stage.show();
     }
 }
