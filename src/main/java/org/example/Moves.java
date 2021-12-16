@@ -5,7 +5,7 @@ import org.example.GameLogic.Position;
 
 public class Moves {
 
-    public static boolean isMoveLegal(Position initial, Position target, Piece piece){
+   /* public static boolean isMoveLegal(Position initial, Position target, Piece piece){
         switch (piece){
             case KING:{
                 break;
@@ -28,5 +28,5 @@ public class Moves {
                 break;
             }
         }
-    }
+    }*/
 }

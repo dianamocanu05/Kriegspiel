@@ -28,6 +28,19 @@ public class Board {
         }
     }
 
+    public HashMap<Position, Piece> getConfiguration(){
+        return configuration;
+    }
+
+    public Piece getPieceAtPosition(Position position){
+        for(Map.Entry<Position, Piece> entry : configuration.entrySet()){
+            if(entry.getKey().equals(position)){
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
 
 
 

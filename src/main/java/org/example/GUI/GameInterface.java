@@ -12,16 +12,20 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import org.example.Constants;
+import org.example.GameLogic.Board;
 
 public class GameInterface {
     private Stage stage;
@@ -119,6 +123,7 @@ public class GameInterface {
         StackPane stackPane = new StackPane();
         addImage(stackPane,Constants.getBorodinoMap());
         playMusic(stackPane, Constants.getAudio2());
+        createChessBoard(stackPane, new Board());
         stage.setScene(new Scene(stackPane));
         stage.show();
     }
@@ -138,5 +143,50 @@ public class GameInterface {
         stackPane.getChildren().add(hBox);
         stage.setScene(new Scene(stackPane));
         stage.show();
+    }
+
+    public static void createChessBoard(StackPane stackPane, Board board){
+        GridPane pane = new GridPane();
+
+        int count = 0;
+        int size = 75;
+
+        GridPane lettersNumbers = new GridPane();
+        for(int i=1; i<=8;i++){
+            Label letter = new Label(String.valueOf((char)('A' + i-1)));
+            letter.setPrefSize(75,75);
+            letter.setAlignment(Pos.BOTTOM_CENTER);
+            letter.setFont(Constants.getFont());
+            letter.setTextFill(Color.RED);
+
+            Label number = new Label(String.valueOf(i));
+            number.setPrefSize(75,75);
+            number.setAlignment(Pos.CENTER_LEFT);
+            number.setFont(Constants.getFont());
+            number.setTextFill(Color.RED);
+
+            lettersNumbers.add(letter,i,8);
+            lettersNumbers.add(number,0,i);
+        }
+        lettersNumbers.setGridLinesVisible(false);
+
+        for (int i = 1; i <= 8; i++) {
+            count++;
+            for (int j = 1; j <= 8; j++) {
+                    Rectangle rectangle = new Rectangle(size, size, size, size);
+                    if (count % 2 == 0) {
+                        rectangle.setFill(Color.WHITE);
+                    }
+                    rectangle.setOpacity(0.5);
+                    pane.add(rectangle, j, i);
+                    count++;
+                }
+            }
+
+        pane.setGridLinesVisible(true);
+        pane.setAlignment(Pos.CENTER);
+        lettersNumbers.setAlignment(Pos.CENTER);
+        stackPane.getChildren().add(pane);
+        stackPane.getChildren().add(lettersNumbers);
     }
 }
