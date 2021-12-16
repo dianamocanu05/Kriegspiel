@@ -149,26 +149,30 @@ public class GameInterface {
         GridPane pane = new GridPane();
 
         int count = 0;
-        int size = 75;
+        int size = 70;
 
         GridPane lettersNumbers = new GridPane();
-        for(int i=1; i<=8;i++){
-            Label letter = new Label(String.valueOf((char)('A' + i-1)));
-            letter.setPrefSize(75,75);
+        lettersNumbers.setAlignment(Pos.CENTER);
+
+
+        for(int i=0;  i<8;i++){
+            Label letter = new Label(String.valueOf((char)('A' + i)));
+            letter.setPrefSize(70,70);
             letter.setAlignment(Pos.BOTTOM_CENTER);
             letter.setFont(Constants.getFont());
             letter.setTextFill(Color.RED);
 
-            Label number = new Label(String.valueOf(i));
-            number.setPrefSize(75,75);
-            number.setAlignment(Pos.CENTER_LEFT);
+            Label number = new Label(String.valueOf(8-i));
+            number.setPrefSize(70,70);
+            number.setAlignment(Pos.BOTTOM_LEFT);
             number.setFont(Constants.getFont());
             number.setTextFill(Color.RED);
 
-            lettersNumbers.add(letter,i,8);
+            lettersNumbers.add(letter,i,10);
             lettersNumbers.add(number,0,i);
         }
-        lettersNumbers.setGridLinesVisible(false);
+
+        //lettersNumbers.setGridLinesVisible(true);
 
         for (int i = 1; i <= 8; i++) {
             count++;
@@ -185,7 +189,6 @@ public class GameInterface {
 
         pane.setGridLinesVisible(true);
         pane.setAlignment(Pos.CENTER);
-        lettersNumbers.setAlignment(Pos.CENTER);
         stackPane.getChildren().add(pane);
         stackPane.getChildren().add(lettersNumbers);
     }
