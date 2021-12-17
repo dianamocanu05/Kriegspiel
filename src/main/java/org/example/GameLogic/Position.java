@@ -11,11 +11,11 @@ public class Position {
         this.number = number;
     }
 
-    private char getLetter(){
+    public char getLetter(){
         return letter;
     }
 
-    private int getNumber(){
+    public int getNumber(){
         return number;
     }
 

@@ -7,23 +7,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Board {
-    private HashMap<Position, PieceType> configuration;
+    private final HashMap<Position, PieceType> configuration;
 
     public Board() {
         configuration = new HashMap<>();
         initialConfiguration();
     }
 
-    public void putPieceType(PieceType piece, Position position){
-        replace(piece, position);
-    }
 
     public void replace(PieceType newPieceType, Position position){
         for(Map.Entry<Position, PieceType> entry : configuration.entrySet()){
             if(entry.getKey().equals(position)){
-                configuration.replace(entry.getKey(), newPieceType);
+                this.configuration.replace(entry.getKey(), newPieceType);
             }
         }
+    }
+
+    public void movePiece(Position initial, Position target){
+        this.configuration.put(target, getPieceAtPosition(initial));
+        this.configuration.put(initial, null);
     }
 
     public HashMap<Position, PieceType> getConfiguration(){
@@ -31,7 +33,7 @@ public class Board {
     }
 
     public PieceType getPieceAtPosition(Position position){
-        for(Map.Entry<Position, PieceType> entry : configuration.entrySet()){
+        for(Map.Entry<Position, PieceType> entry : this.configuration.entrySet()){
             if(entry.getKey().equals(position)){
                 return entry.getValue();
             }
@@ -55,6 +57,8 @@ public class Board {
         this.configuration.put(new Position('G',1), PieceType.ROOK);
         this.configuration.put(new Position('H',1), PieceType.QUEEN);
     }
+
+
 
 
 

@@ -38,6 +38,8 @@ import org.example.GameLogic.Position;
 public class GameInterface {
     private Stage stage;
     private static List<Rectangle> chessBoard = new ArrayList<>();
+    private static Board board = new Board();
+    private static Rectangle initial;
     public GameInterface(Stage stage){
         this.stage = stage;
     }
@@ -132,7 +134,7 @@ public class GameInterface {
         StackPane stackPane = new StackPane();
         addImage(stackPane,Constants.getBorodinoMap());
         playMusic(stackPane, Constants.getAudio2());
-        createChessBoard(stackPane, new Board());
+        createChessBoard(stackPane);
         stage.setScene(new Scene(stackPane));
         stage.show();
     }
@@ -154,7 +156,7 @@ public class GameInterface {
         stage.show();
     }
 
-    public static void createChessBoard(StackPane stackPane, Board board){
+    public static void createChessBoard(StackPane stackPane){
         GridPane pane = new GridPane();
 
         int count = 0;
@@ -201,7 +203,7 @@ public class GameInterface {
 
                 if(piece != null){
                     ImageView pieceImage = new ImageView(Constants.getPiecePath(piece,"white"));
-                    addPieceMouseListener(pieceImage, piece, pane, board);
+                    addPieceMouseListener(pieceImage, piece, pane);
                     pane.add(pieceImage,j,i);
                 }
                 }
@@ -213,11 +215,12 @@ public class GameInterface {
         stackPane.getChildren().add(pane);
     }
 
-    private static void addPieceMouseListener(ImageView imageView, PieceType pieceType, GridPane pane, Board board){
+    private static void addPieceMouseListener(ImageView imageView, PieceType pieceType, GridPane pane){
         imageView.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                mouseEvent.consume();
+                initial = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+
             }
         });
 
@@ -232,21 +235,24 @@ public class GameInterface {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 Rectangle target = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
-                movePiece(pieceType, imageView, pane, target, board);
+                movePiece(pieceType, imageView, pane, target);
             }
         });
     }
 
-    private static void movePiece(PieceType pieceType, ImageView piece, GridPane pane, Rectangle target, Board board){
+    private static void movePiece(PieceType pieceType, ImageView piece, GridPane pane, Rectangle target){
         int i = GridPane.getRowIndex(target);
         int j = GridPane.getColumnIndex(target);
-        pane.getChildren().remove(piece);
-        pane.add(piece, j,i);
-
-        board.replace(pieceType, new Position((char)('A' + j - 1),8- i));
-        /*System.out.print("Moved " + pieceType.toString() + " to ");
-        new Position((char) ('A' + j - 1), 8- i).print();
-        */
+        Position newPosition = new Position((char)('A' + j - 1),9- i);
+        //System.out.println(i + " " + j + " - " + newPosition.getLetter() + " " + newPosition.getNumber());
+        if(board.getPieceAtPosition(newPosition) == null) {
+            pane.getChildren().remove(piece);
+            pane.add(piece, j, i);
+            Position oldPosition = new Position((char) ('A' + GridPane.getColumnIndex(initial) -1), 9-GridPane.getRowIndex(initial));
+            board.movePiece(oldPosition, newPosition);
+        }else{
+            System.out.println("Position not empty  " + board.getPieceAtPosition(newPosition).toString());
+        }
     }
 
     private static Rectangle getTargetRectangle(double x, double y){
