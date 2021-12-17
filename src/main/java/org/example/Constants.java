@@ -2,7 +2,7 @@ package org.example;
 
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import org.example.GameLogic.Piece;
+import org.example.GameLogic.PieceType;
 
 public class Constants {
     private static final int HEIGHT = 675;
@@ -52,7 +52,7 @@ public class Constants {
         return borodinoMap;
     }
 
-    public static String getPiecePath(Piece piece, String color){
+    public static String getPiecePath(PieceType piece, String color){
         return "file:media/pieces/" + piece.toString() + "_" + color + ".png";
     }
 }

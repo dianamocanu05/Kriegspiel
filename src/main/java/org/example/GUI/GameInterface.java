@@ -1,8 +1,10 @@
 package org.example.GUI;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -11,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -24,17 +27,23 @@ import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.example.Constants;
 import org.example.GameLogic.Board;
+import org.example.GameLogic.PieceType;
+import org.example.GameLogic.Position;
 
 public class GameInterface {
     private Stage stage;
-
+    private static List<Rectangle> chessBoard = new ArrayList<>();
     public GameInterface(Stage stage){
         this.stage = stage;
     }
     public void initialize(){
         initScreen();
+
     }
 
     public void initScreen(){
@@ -82,7 +91,7 @@ public class GameInterface {
         button.setText(text);
         button.setFont(Constants.getFont());
         button.setStyle("-fx-background-color: #E7B557;");
-        addMouseListener(button, text, stage);
+        addButtonMouseListener(button, text, stage);
         return button;
     }
 
@@ -92,11 +101,11 @@ public class GameInterface {
         button.setText(text);
         button.setFont(font);
         button.setStyle("-fx-background-color: #E7B557;");
-        addMouseListener(button, text, stage);
+        addButtonMouseListener(button, text, stage);
         return button;
     }
 
-    public static void  addMouseListener(Node node, String text, Stage stage){
+    public static void  addButtonMouseListener(Node node, String text, Stage stage){
         node.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -172,24 +181,80 @@ public class GameInterface {
             lettersNumbers.add(number,0,i);
         }
 
-        //lettersNumbers.setGridLinesVisible(true);
-
         for (int i = 1; i <= 8; i++) {
             count++;
             for (int j = 1; j <= 8; j++) {
+
                     Rectangle rectangle = new Rectangle(size, size, size, size);
                     if (count % 2 == 0) {
                         rectangle.setFill(Color.WHITE);
                     }
+                    rectangle.setFocusTraversable(false);
                     rectangle.setOpacity(0.5);
+
+                    chessBoard.add(rectangle);
                     pane.add(rectangle, j, i);
                     count++;
+
+                Position position = new Position((char)('A' + j -1), 9-i);
+                PieceType piece = board.getPieceAtPosition(position);
+
+                if(piece != null){
+                    ImageView pieceImage = new ImageView(Constants.getPiecePath(piece,"white"));
+                    addPieceMouseListener(pieceImage, piece, pane, board);
+                    pane.add(pieceImage,j,i);
+                }
                 }
             }
 
         pane.setGridLinesVisible(true);
         pane.setAlignment(Pos.CENTER);
-        stackPane.getChildren().add(pane);
         stackPane.getChildren().add(lettersNumbers);
+        stackPane.getChildren().add(pane);
+    }
+
+    private static void addPieceMouseListener(ImageView imageView, PieceType pieceType, GridPane pane, Board board){
+        imageView.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                mouseEvent.consume();
+            }
+        });
+
+        imageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent dragEvent) {
+
+            }
+        });
+
+        imageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Rectangle target = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                movePiece(pieceType, imageView, pane, target, board);
+            }
+        });
+    }
+
+    private static void movePiece(PieceType pieceType, ImageView piece, GridPane pane, Rectangle target, Board board){
+        int i = GridPane.getRowIndex(target);
+        int j = GridPane.getColumnIndex(target);
+        pane.getChildren().remove(piece);
+        pane.add(piece, j,i);
+
+        board.replace(pieceType, new Position((char)('A' + j - 1),8- i));
+        /*System.out.print("Moved " + pieceType.toString() + " to ");
+        new Position((char) ('A' + j - 1), 8- i).print();
+        */
+    }
+
+    private static Rectangle getTargetRectangle(double x, double y){
+        for(Rectangle rectangle : chessBoard){
+            if(rectangle.getBoundsInParent().contains(new Point2D(x,y))){
+                return  rectangle;
+            }
+        }
+        return null;
     }
 }

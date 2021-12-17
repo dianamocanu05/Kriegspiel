@@ -1,6 +1,6 @@
-package org.example;
+package org.example.GameLogic;
 
-import org.example.GameLogic.Piece;
+import org.example.GameLogic.PieceType;
 import org.example.GameLogic.Position;
 
 public class Moves {

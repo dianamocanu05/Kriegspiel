@@ -1,6 +1,6 @@
 package org.example.GameLogic;
 
-public enum Piece {
+public enum PieceType {
     KING,
     QUEEN,
     ROOK,
