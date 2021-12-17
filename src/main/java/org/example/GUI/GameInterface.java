@@ -220,14 +220,14 @@ public class GameInterface {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 initial = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
-
+                mouseEvent.consume();
             }
         });
 
         imageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent dragEvent) {
-
+                dragEvent.consume();
             }
         });
 
@@ -236,6 +236,7 @@ public class GameInterface {
             public void handle(MouseEvent mouseEvent) {
                 Rectangle target = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
                 movePiece(pieceType, imageView, pane, target);
+                mouseEvent.consume();
             }
         });
     }
@@ -243,15 +244,14 @@ public class GameInterface {
     private static void movePiece(PieceType pieceType, ImageView piece, GridPane pane, Rectangle target){
         int i = GridPane.getRowIndex(target);
         int j = GridPane.getColumnIndex(target);
+
         Position newPosition = new Position((char)('A' + j - 1),9- i);
-        //System.out.println(i + " " + j + " - " + newPosition.getLetter() + " " + newPosition.getNumber());
+        Position oldPosition = new Position((char) ('A' + GridPane.getColumnIndex(initial) -1), 9-GridPane.getRowIndex(initial));
+
         if(board.getPieceAtPosition(newPosition) == null) {
             pane.getChildren().remove(piece);
             pane.add(piece, j, i);
-            Position oldPosition = new Position((char) ('A' + GridPane.getColumnIndex(initial) -1), 9-GridPane.getRowIndex(initial));
-            board.movePiece(oldPosition, newPosition);
-        }else{
-            System.out.println("Position not empty  " + board.getPieceAtPosition(newPosition).toString());
+            board.replace(pieceType, oldPosition, newPosition);
         }
     }
 
