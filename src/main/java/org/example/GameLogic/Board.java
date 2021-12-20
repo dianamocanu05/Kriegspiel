@@ -44,20 +44,20 @@ public class Board {
         for(int i=1;i<=8;i++){
             char letter = (char)('A' + i -1);
             Position position = new Position(letter,2);
-            this.configuration.add(new PiecePosition(position, PieceType.PAWN));
+            this.configuration.add(new PiecePosition(position, PieceType.PAWN, "white"));
 
             for(int j=3; j<=8; j++){
-                this.configuration.add(new PiecePosition(new Position(letter,j), PieceType.NONE));
+                this.configuration.add(new PiecePosition(new Position(letter,j), PieceType.NONE, "white") );
             }
         }
-        this.configuration.add(new PiecePosition(new Position('A',1),PieceType.ROOK));
-        this.configuration.add(new PiecePosition(new Position('B',1),PieceType.BISHOP));
-        this.configuration.add(new PiecePosition(new Position('C',1), PieceType.KING));
-        this.configuration.add(new PiecePosition(new Position('D',1), PieceType.KNIGHT));
-        this.configuration.add(new PiecePosition(new Position('E',1), PieceType.BISHOP));
-        this.configuration.add(new PiecePosition(new Position('F',1),PieceType.KNIGHT));
-        this.configuration.add(new PiecePosition(new Position('G',1), PieceType.ROOK));
-        this.configuration.add(new PiecePosition(new Position('H',1), PieceType.QUEEN));
+        this.configuration.add(new PiecePosition(new Position('A',1),PieceType.ROOK, "white"));
+        this.configuration.add(new PiecePosition(new Position('B',1),PieceType.BISHOP, "white"));
+        this.configuration.add(new PiecePosition(new Position('C',1), PieceType.KING, "white"));
+        this.configuration.add(new PiecePosition(new Position('D',1), PieceType.KNIGHT, "white"));
+        this.configuration.add(new PiecePosition(new Position('E',1), PieceType.BISHOP, "white"));
+        this.configuration.add(new PiecePosition(new Position('F',1),PieceType.KNIGHT, "white"));
+        this.configuration.add(new PiecePosition(new Position('G',1), PieceType.ROOK, "white"));
+        this.configuration.add(new PiecePosition(new Position('H',1), PieceType.QUEEN, "white"));
     }
 
     public void print(){

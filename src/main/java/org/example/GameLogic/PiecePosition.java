@@ -3,10 +3,12 @@ package org.example.GameLogic;
 public class PiecePosition {
     private Position position;
     private PieceType pieceType;
+    private String color;
 
-    public PiecePosition(Position position, PieceType pieceType){
+    public PiecePosition(Position position, PieceType pieceType, String color){
         this.pieceType = pieceType;
         this.position = position;
+        this.color = color;
     }
 
     public void setPieceType(PieceType pieceType){
@@ -19,5 +21,9 @@ public class PiecePosition {
 
     public PieceType getPieceType(){
         return pieceType;
+    }
+
+    public String getColor(){
+        return color;
     }
 }

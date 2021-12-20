@@ -1,24 +1,40 @@
 package org.example.GameLogic;
 
+import javafx.geometry.Pos;
 import org.example.GameLogic.PieceType;
+import org.example.GameLogic.Players.Player;
 import org.example.GameLogic.Position;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Moves {
+public class Move {
 
+    private Position initial, target;
+    private PieceType pieceType;
+    private Board board;
+    private Player player;
     private static final List<String> diagonalDirections = Arrays.asList("RIGHT_UP", "RIGHT_DOWN", "LEFT_UP", "LEFT_DOWN");
-   public static boolean isMoveLegal(Position initial, Position target, PieceType piece, Board board){
-        switch (piece){
+
+    public Move(Position initial, Position target, PieceType pieceType, Board board, Player player){
+        this.board = board;
+        this.initial = initial;
+        this.target = target;
+        this.player = player;
+        this.pieceType = pieceType;
+    }
+
+
+   public  boolean isMoveLegal(){
+        switch (pieceType){
             /*
              * Kings move one square in any direction, so long as that square
              * is not attacked by an enemy piece. Additionally, kings are able
              * to make a special move, known as castling.
              */
             case KING:{
-                return ((getDistance(initial, target) == 1) && !(moveContainsEnemyPiece(initial, target, board)));
+                return ((getDistance() == 1) && !(moveContainsEnemyPiece()));
             }
 
             /*
@@ -26,7 +42,7 @@ public class Moves {
              * any number of squares. They are unable to jump over pieces.
              */
             case QUEEN:{
-                return !moveContainsEnemyPiece(initial, target, board);
+                return !moveContainsEnemyPiece();
             }
 
             /*
@@ -34,7 +50,7 @@ public class Moves {
              * They are unable to jump over pieces. Rooks move when the king castles.
              */
             case ROOK:{
-                return ((Objects.equals(computeDirection(initial, target), "UP") || Objects.equals(computeDirection(initial, target), "DOWN")) && (!moveContainsEnemyPiece(initial, target, board)));
+                return ((Objects.equals(computeDirection(), "UP") || Objects.equals(computeDirection(), "DOWN")) && (!moveContainsEnemyPiece()));
             }
 
             /*
@@ -42,7 +58,7 @@ public class Moves {
             *  They are unable to jump over pieces.
             */
             case BISHOP:{
-                return (diagonalDirections.contains(computeDirection(initial, target)) && !moveContainsEnemyPiece(initial, target, board));
+                return (diagonalDirections.contains(computeDirection()) && !moveContainsEnemyPiece());
             }
 
             /*
@@ -51,7 +67,7 @@ public class Moves {
              * They are the only piece able to jump over other pieces.
              */
             case KNIGHT:{
-                return isLMove(initial, target);
+                return isLMove();
             }
 
             /*
@@ -61,7 +77,7 @@ public class Moves {
              * diagonally in a forward direction
              */
             case PAWN:{
-                return (Objects.equals(computeDirection(initial, target), "UP") && getDistance(initial, target) ==1);
+                return (Objects.equals(computeDirection(), "UP") && getDistance() ==1);
             }
         }
         return false;
@@ -70,7 +86,7 @@ public class Moves {
     /**
      * Work in progress
      */
-    private static int getDistance(Position initial, Position target){
+    private  int getDistance(){
        char initialLetter = initial.getLetter();
        int initialNumber = initial.getNumber();
 
@@ -88,7 +104,7 @@ public class Moves {
        return -1;
     }
 
-    private static String computeDirection(Position initial, Position target){
+    private  String computeDirection(){
         if(initial.getNumber() == target.getNumber()){ //HORIZONTALLY
             if(initial.getLetter() - 'A' < target.getLetter() - 'A'){
                 return "RIGHT";
@@ -124,8 +140,8 @@ public class Moves {
         return null;
     }
 
-    private static boolean moveContainsEnemyPiece(Position initial, Position target, Board board){
-        String direction = computeDirection(initial, target);
+    private  boolean moveContainsEnemyPiece(){
+        String direction = computeDirection();
         switch (direction){
             case "UP":{
                 int initialNumber = initial.getNumber();
@@ -181,7 +197,7 @@ public class Moves {
         return false;
     }
 
-    private static boolean isLMove(Position initial, Position target){
+    private  boolean isLMove(){
         int initialNumber = initial.getNumber();
         char initialLetter = initial.getLetter();
 

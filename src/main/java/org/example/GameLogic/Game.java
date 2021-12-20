@@ -16,10 +16,9 @@ public class Game implements Runnable{
         game.initialize();
 
         //2. initialize Players
-        HumanPlayer humanPlayer = new HumanPlayer("Emperor Napoleon");
-        IntelligentPlayer intelligentPlayer = new IntelligentPlayer("Marshall Kutuzov");
+        HumanPlayer humanPlayer = new HumanPlayer("Emperor Napoleon", "white");
+        IntelligentPlayer intelligentPlayer = new IntelligentPlayer("Marshall Kutuzov", "black");
         currentPlayer = humanPlayer;
-
 
     }
 
