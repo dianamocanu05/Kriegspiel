@@ -248,7 +248,7 @@ public class GameInterface {
         Position newPosition = new Position((char)('A' + j - 1),9- i);
         Position oldPosition = new Position((char) ('A' + GridPane.getColumnIndex(initial) -1), 9-GridPane.getRowIndex(initial));
 
-        if(board.getPieceAtPosition(newPosition) == null) {
+        if(board.getPieceAtPosition(newPosition) == PieceType.NONE) {
             pane.getChildren().remove(piece);
             pane.add(piece, j, i);
             board.replace(pieceType, oldPosition, newPosition);
