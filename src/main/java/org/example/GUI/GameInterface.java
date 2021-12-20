@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.example.Constants;
 import org.example.GameLogic.Board;
+import org.example.GameLogic.Moves;
 import org.example.GameLogic.PieceType;
 import org.example.GameLogic.Position;
 
@@ -248,7 +249,7 @@ public class GameInterface {
         Position newPosition = new Position((char)('A' + j - 1),9- i);
         Position oldPosition = new Position((char) ('A' + GridPane.getColumnIndex(initial) -1), 9-GridPane.getRowIndex(initial));
 
-        if(board.getPieceAtPosition(newPosition) == PieceType.NONE) {
+        if(board.getPieceAtPosition(newPosition) == PieceType.NONE && Moves.isMoveLegal(oldPosition, newPosition, pieceType, board)) {
             pane.getChildren().remove(piece);
             pane.add(piece, j, i);
             board.replace(pieceType, oldPosition, newPosition);
