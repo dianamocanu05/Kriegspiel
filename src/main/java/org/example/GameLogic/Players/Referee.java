@@ -5,9 +5,15 @@ import org.example.GameLogic.Move;
 
 public class Referee {
 
-    public Referee(Board board){};
+    public Referee(){};
 
-    public void announce(Player currentPlayer, Move attemptedMove){
-
+    public boolean announce(Player currentPlayer, Move attemptedMove){
+        if(attemptedMove.isMoveLegal()){
+            System.out.println("YES, SIR");
+            return true;
+        }
+        System.out.println("NO, SIR");
+        return false;
     }
+
 }

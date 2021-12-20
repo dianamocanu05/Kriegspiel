@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.example.GUI.GameInterface;
+import org.example.GameLogic.Board;
 import org.example.GameLogic.Game;
 
 /**
@@ -17,6 +18,8 @@ public class App extends Application {
     public void start(Stage stage) {
         Game game = new Game();
         game.initialize(stage);
+
+        game.run();
     }
 
     public static void main(String[] args) {

@@ -29,21 +29,28 @@ import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import org.example.Constants;
-import org.example.GameLogic.Board;
-import org.example.GameLogic.Move;
-import org.example.GameLogic.PieceType;
+import org.example.GameLogic.*;
 import org.example.GameLogic.Players.HumanPlayer;
-import org.example.GameLogic.Position;
+import org.example.GameLogic.Players.Player;
 
 public class GameInterface {
     private Stage stage;
     private static List<Rectangle> chessBoard = new ArrayList<>();
-    private static Board board = new Board();
+    private static Board board;
     private static Rectangle initial;
-    public GameInterface(Stage stage){
+    private static Player currentPlayer;
+    private StackPane stackPane;
+
+    public final Object mutex = new Object();
+    public boolean chosen = false;
+    public Move currentMove;
+
+    public GameInterface(Stage stage, Board board){
         this.stage = stage;
+        this.board = board;
     }
     public void initialize(){
         initScreen();
@@ -51,7 +58,7 @@ public class GameInterface {
     }
 
     public void initScreen(){
-        StackPane stackPane = new StackPane();
+        stackPane = new StackPane();
         playMusic(stackPane, Constants.getAudio1());
         addImage(stackPane, Constants.getBackgroundImg());
         VBox vbox = new VBox();
@@ -69,6 +76,10 @@ public class GameInterface {
         Scene scene = new Scene(stackPane);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void setCurrentPlayer(Player currentPlayer){
+        this.currentPlayer = currentPlayer;
     }
 
     public static void addImage(StackPane stackPane, String imgPath){
@@ -89,7 +100,7 @@ public class GameInterface {
 
     }
 
-    public static Button addButton(StackPane stackPane, String text, Stage stage){
+    public  Button addButton(StackPane stackPane, String text, Stage stage){
         Button button = new Button(text);
         button.setPrefSize(200,10);
         button.setText(text);
@@ -99,7 +110,7 @@ public class GameInterface {
         return button;
     }
 
-    public static Button addButton(StackPane stackPane, String text, Stage stage, int height, int width, Font font){
+    public  Button addButton(StackPane stackPane, String text, Stage stage, int height, int width, Font font){
         Button button = new Button(text);
         button.setPrefSize(height,width);
         button.setText(text);
@@ -109,7 +120,7 @@ public class GameInterface {
         return button;
     }
 
-    public static void  addButtonMouseListener(Node node, String text, Stage stage){
+    public  void  addButtonMouseListener(Node node, String text, Stage stage){
         node.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -125,14 +136,14 @@ public class GameInterface {
                         aboutInterface(stage);
                         break;
                     case "Back":
-                        new GameInterface(stage).initialize();
+                        new GameInterface(stage, board).initialize();
                         break;
                 }
             }
         });
     }
 
-    public static void gameInterface(Stage stage){
+    public  void gameInterface(Stage stage){
         StackPane stackPane = new StackPane();
         addImage(stackPane,Constants.getBorodinoMap());
         playMusic(stackPane, Constants.getAudio2());
@@ -145,7 +156,7 @@ public class GameInterface {
 
     }
 
-    public static void aboutInterface(Stage stage){
+    public  void aboutInterface(Stage stage){
         StackPane stackPane = new StackPane();
         addImage(stackPane,Constants.getAboutImg());
         playMusic(stackPane, Constants.getAudio1());
@@ -158,7 +169,7 @@ public class GameInterface {
         stage.show();
     }
 
-    public static void createChessBoard(StackPane stackPane){
+    public  void createChessBoard(StackPane stackPane){
         GridPane pane = new GridPane();
 
         int count = 0;
@@ -217,7 +228,26 @@ public class GameInterface {
         stackPane.getChildren().add(pane);
     }
 
-    private static void addPieceMouseListener(ImageView imageView, PieceType pieceType, GridPane pane){
+    public void printChessConfiguration(){
+        GridPane pane = new GridPane();
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+
+                Position position = new Position((char)('A' + j -1), 9-i);
+                PieceType piece = currentPlayer.getBoard().getPieceAtPosition(position);
+
+                if(piece != null){
+                    ImageView pieceImage = new ImageView(Constants.getPiecePath(piece,"white"));
+                    addPieceMouseListener(pieceImage, piece, pane);
+                    pane.add(pieceImage,j,i);
+                }
+            }
+        }
+        pane.setAlignment(Pos.CENTER);
+        stackPane.getChildren().add(pane);
+    }
+
+    private  void addPieceMouseListener(ImageView imageView, PieceType pieceType, GridPane pane){
         imageView.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -236,14 +266,29 @@ public class GameInterface {
         imageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                synchronized (mutex){
+                    chosen = true;
+                    mutex.notify();
+                }
                 Rectangle target = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
-                movePiece(pieceType, imageView, pane, target);
+                currentPlayer.setAttemptedMove(getMove(pieceType, target));
                 mouseEvent.consume();
+
             }
         });
     }
 
-    private static void movePiece(PieceType pieceType, ImageView piece, GridPane pane, Rectangle target){
+    private static Move getMove(PieceType pieceType, Rectangle target){
+        int i = GridPane.getRowIndex(target);
+        int j = GridPane.getColumnIndex(target);
+
+        Position newPosition = new Position((char)('A' + j - 1),9- i);
+        Position oldPosition = new Position((char) ('A' + GridPane.getColumnIndex(initial) -1), 9-GridPane.getRowIndex(initial));
+
+        return new Move(oldPosition, newPosition, pieceType, currentPlayer.getBoard(), currentPlayer);
+    }
+
+    /*private static void movePiece(PieceType pieceType, ImageView piece, GridPane pane, Rectangle target){
         int i = GridPane.getRowIndex(target);
         int j = GridPane.getColumnIndex(target);
 
@@ -253,9 +298,9 @@ public class GameInterface {
         if(board.getPieceAtPosition(newPosition) == PieceType.NONE && new Move(oldPosition, newPosition, pieceType, board, new HumanPlayer("Test", "white")).isMoveLegal()) {
             pane.getChildren().remove(piece);
             pane.add(piece, j, i);
-            board.replace(pieceType, oldPosition, newPosition);
+            board.replace(new Move(oldPosition, newPosition, pieceType, currentPlayer.getBoard(),currentPlayer));
         }
-    }
+    }*/
 
     private static Rectangle getTargetRectangle(double x, double y){
         for(Rectangle rectangle : chessBoard){

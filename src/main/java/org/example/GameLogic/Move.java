@@ -25,6 +25,18 @@ public class Move {
         this.pieceType = pieceType;
     }
 
+    public PieceType getPieceType(){
+        return pieceType;
+    }
+
+    public Position getInitial(){
+        return initial;
+    }
+
+    public Position getTarget(){
+        return target;
+    }
+
 
    public  boolean isMoveLegal(){
         switch (pieceType){

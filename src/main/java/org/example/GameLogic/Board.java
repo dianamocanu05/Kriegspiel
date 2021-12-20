@@ -14,13 +14,13 @@ public class Board {
     }
 
 
-    public void replace(PieceType newPieceType, Position oldPosition, Position newPosition){
+    public void replace(Move move){
         for(PiecePosition piecePosition : this.configuration){
-            if(piecePosition.getPosition().equals(oldPosition)){
+            if(piecePosition.getPosition().equals(move.getInitial())){
                 piecePosition.setPieceType(PieceType.NONE);
             }
-            if(piecePosition.getPosition().equals(newPosition)){
-                piecePosition.setPieceType(newPieceType);
+            if(piecePosition.getPosition().equals(move.getTarget())){
+                piecePosition.setPieceType(move.getPieceType());
             }
         }
     }
