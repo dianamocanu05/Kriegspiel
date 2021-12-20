@@ -15,7 +15,7 @@ import java.util.List;
 public class Game {
 
     private GameInterface GUI;
-    private Player currentPlayer, nextPlayer;
+    private Player currentPlayer;
     private Referee referee;
     private List<Player> players;
 
@@ -24,11 +24,7 @@ public class Game {
     }
 
     public void initPlayers() {
-        for (Player player : players) {
-            Thread thread = new Thread(player);
-            player.setThread(thread);
-            thread.start();
-        }
+        
     }
 
     public void setCurrentPlayer(Player currentPlayer) {
@@ -36,11 +32,16 @@ public class Game {
     }
 
     public void switchPlayer() {
+        System.out.println("switched player");
         this.currentPlayer = players.get(1 - players.indexOf(currentPlayer));
     }
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public void updatePlayer(Player oldPlayer, Player newPlayer){
+        players.set(players.indexOf(oldPlayer), newPlayer);
     }
 
     public void start() {
@@ -66,15 +67,7 @@ public class Game {
     }
 
     public void update() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Stage stage = GUI.getStage();
-                GUI.gameInterface(stage);
-            }
-        });
-
-
+        System.out.println("");
         switchPlayer();
     }
 }

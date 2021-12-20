@@ -6,7 +6,7 @@ import java.time.Period;
 import java.util.*;
 
 public class Board {
-    private final List<PiecePosition> configuration;
+    private List<PiecePosition> configuration;
 
     public Board() {
         configuration = new ArrayList<>();
@@ -14,7 +14,8 @@ public class Board {
     }
 
 
-    public void replace(Move move){
+    public List<PiecePosition> replace(Move move){
+        List<PiecePosition> newBoard = new ArrayList<>();
         for(PiecePosition piecePosition : this.configuration){
             if(piecePosition.getPosition().equals(move.getInitial())){
                 piecePosition.setPieceType(PieceType.NONE);
@@ -22,8 +23,14 @@ public class Board {
             if(piecePosition.getPosition().equals(move.getTarget())){
                 piecePosition.setPieceType(move.getPieceType());
             }
+            newBoard.add(piecePosition);
+
         }
-        System.out.println("Moved " + move.getPieceType().toString());
+        return newBoard;
+    }
+
+    public void setConfiguration(List<PiecePosition> newBoard){
+        this.configuration = newBoard;
     }
 
 

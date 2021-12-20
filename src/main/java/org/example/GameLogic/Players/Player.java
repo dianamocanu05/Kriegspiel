@@ -5,13 +5,17 @@ import org.example.GameLogic.Game;
 import org.example.GameLogic.Move;
 import org.example.GameLogic.PiecePosition;
 
-public abstract class Player implements Runnable {
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public abstract class Player {
 
     private String name;
     private String color;
     private Board board;
-    protected Thread thread;
     protected  Game game;
+    private final AtomicBoolean signal = new AtomicBoolean(false);
+
 
     public Player(String name, String color) {
         this.name = name;
@@ -37,9 +41,6 @@ public abstract class Player implements Runnable {
         this.board = board;
     }
 
-    public void setThread(Thread thread) {
-        this.thread = thread;
-    }
 
     public void setGame(Game game) {
         this.game = game;
@@ -57,27 +58,35 @@ public abstract class Player implements Runnable {
         return board;
     }
 
-    private void waitTurn() throws InterruptedException {
-        synchronized (game) {
-            while (game.getCurrentPlayer().equals(this)) {
-                this.game.wait();
-            }
-        }
-    }
 
 
-    @Override
+
     public void run() {
         while (true){
-            try{
-                waitTurn();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(!signal.get()){
+                synchronized (signal){
+                    try {
+                        signal.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+            signal.set(false);
+
             System.out.println(this.getName() + "'S TURN");
+
             Move move = attemptMove();
-            this.board.replace(move);
+            Player oldPlayer = this;
+            List<PiecePosition> newConf = this.board.replace(move);
+            Board board = new Board();
+            board.setConfiguration(newConf);
+            this.board = board;
+            game.updatePlayer(oldPlayer, this);
             game.update();
+
+            signal.set(true);
+            signal.notify();
         }
     }
 

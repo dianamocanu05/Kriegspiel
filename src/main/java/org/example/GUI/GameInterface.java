@@ -60,6 +60,7 @@ public class GameInterface {
     }
 
 
+
     public void initScreen(){
         stackPane = new StackPane();
         playMusic(stackPane, Constants.getAudio1());
@@ -261,11 +262,7 @@ public class GameInterface {
 
                 Rectangle target = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
                 lastMove = getMove(pieceType, target);
-
-                synchronized (mutex){
-                    chosen = true;
-                    mutex.notify();
-                }
+                movePiece(pieceType, imageView, pane, target);
             }
         });
     }
@@ -280,19 +277,22 @@ public class GameInterface {
         return new Move(oldPosition, newPosition, pieceType, currentPlayer.getBoard(), currentPlayer);
     }
 
-    /*private static void movePiece(PieceType pieceType, ImageView piece, GridPane pane, Rectangle target){
+    private void movePiece(PieceType pieceType, ImageView piece, GridPane pane, Rectangle target){
         int i = GridPane.getRowIndex(target);
         int j = GridPane.getColumnIndex(target);
 
         Position newPosition = new Position((char)('A' + j - 1),9- i);
         Position oldPosition = new Position((char) ('A' + GridPane.getColumnIndex(initial) -1), 9-GridPane.getRowIndex(initial));
 
-        if(board.getPieceAtPosition(newPosition) == PieceType.NONE && new Move(oldPosition, newPosition, pieceType, board, new HumanPlayer("Test", "white")).isMoveLegal()) {
+        if(currentPlayer.getBoard().getPieceAtPosition(newPosition) == PieceType.NONE && new Move(oldPosition, newPosition, pieceType, currentPlayer.getBoard(), new HumanPlayer("Test", "white")).isMoveLegal()) {
             pane.getChildren().remove(piece);
             pane.add(piece, j, i);
-            board.replace(new Move(oldPosition, newPosition, pieceType, currentPlayer.getBoard(),currentPlayer));
+            List<PiecePosition> newConf = currentPlayer.getBoard().replace(new Move(oldPosition, newPosition, pieceType, currentPlayer.getBoard(),currentPlayer));
+            Board board = new Board();
+            board.setConfiguration(newConf);
+            currentPlayer.setBoard(board);
         }
-    }*/
+    }
 
     private static Rectangle getTargetRectangle(double x, double y){
         for(Rectangle rectangle : chessBoard){
