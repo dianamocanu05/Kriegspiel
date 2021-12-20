@@ -23,6 +23,7 @@ public class Board {
                 piecePosition.setPieceType(move.getPieceType());
             }
         }
+        System.out.println("Moved " + move.getPieceType().toString());
     }
 
 
@@ -61,14 +62,18 @@ public class Board {
     }
 
     public void print(){
+        int count = 0;
         for(int i=1;i<=8;i++) {
             for (int j = 1; j <= 8; j++) {
-                char letter = (char) ('A' + i - 1);
-                int number = j;
-                System.out.println(letter + "" + number + " - " + getPieceAtPosition(new Position(letter, number)));
+                if(getPieceAtPosition(new Position((char)('A' + i -1),j)) !=  PieceType.NONE){
+                    count++;
+                }
             }
         }
+        System.out.println(count);
     }
+
+
 
 
 

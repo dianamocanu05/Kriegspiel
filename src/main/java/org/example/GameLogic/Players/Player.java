@@ -5,56 +5,89 @@ import org.example.GameLogic.Game;
 import org.example.GameLogic.Move;
 import org.example.GameLogic.PiecePosition;
 
-public abstract class Player implements Runnable{
+public abstract class Player implements Runnable {
 
     private String name;
     private String color;
     private Board board;
-    private Move attemptedMove;
+    protected Thread thread;
     protected Game game;
 
-    public Player(String name, String color, Game game){
+    public Player(String name, String color) {
         this.name = name;
         this.color = color;
-        this.game = game;
     }
 
-    public void setBoard(Board board){
+    public Move attemptMove(){
+        Move move;
+        synchronized (game.getGUI().mutex){
+            while(!game.getGUI().chosen){
+                try{
+                    game.getGUI().mutex.wait();
+                }catch (InterruptedException exc){
+                    exc.printStackTrace();
+                }
+            }
+        }
+        move = game.getGUI().lastMove;
+        return move;
+    }
+
+    public void setBoard(Board board) {
         this.board = board;
     }
 
-    public Board getBoard(){
-        return board;
+    public void setThread(Thread thread) {
+        this.thread = thread;
     }
 
-
-    public abstract void setAttemptedMove(Move move);
-    public Move getAttemptedMove(){
-        return this.attemptedMove;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public String getColor(){
+    public String getColor() {
         return color;
     }
 
-
-    public void waitTurn(){
-
+    public Board getBoard() {
+        return board;
     }
 
+    private void waitTurn() throws InterruptedException {
+        synchronized (game) {
+            while (game.getCurrentPlayer().equals(this)) {
+                this.game.wait();
+            }
+        }
+    }
 
-    public abstract Move chooseMove();
 
     @Override
-    public void run(){
-        chooseMove();
-        game.getGameInterface().chosen = false;
+    public void run() {
+        while (true){
+            try{
+                waitTurn();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(this.getName() + "'S TURN");
+            Move move = attemptMove();
+            this.board.replace(move);
+            game.update();
+        }
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Player)) {
+            return false;
+        }
+        return this.name.equals(((Player) other).getName());
+    }
 
 
 }

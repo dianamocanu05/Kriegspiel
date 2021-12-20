@@ -39,7 +39,6 @@ import org.example.GameLogic.Players.Player;
 public class GameInterface {
     private Stage stage;
     private static List<Rectangle> chessBoard = new ArrayList<>();
-    private static Board board;
     private static Rectangle initial;
     private static Player currentPlayer;
     private StackPane stackPane;
@@ -48,12 +47,21 @@ public class GameInterface {
     public final Object mutex = new Object();
     public boolean chosen = false;
 
-    public GameInterface(Stage stage, Board board){
+    public GameInterface(Stage stage){
         this.stage = stage;
-        this.board = board;
     }
     public void initialize(){
-        initScreen();
+        Platform.setImplicitExit(false);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                initScreen();
+            }
+        });
+    }
+
+    public Stage getStage(){
+        return stage;
     }
 
     public void initScreen(){
@@ -136,7 +144,7 @@ public class GameInterface {
                         aboutInterface(stage);
                         break;
                     case "Back":
-                        new GameInterface(stage, board).initialize();
+                        new GameInterface(stage).initialize();
                         break;
                 }
             }
@@ -144,6 +152,8 @@ public class GameInterface {
     }
 
     public void gameInterface(Stage stage){
+        System.out.println("Here");
+
         StackPane stackPane = new StackPane();
         addImage(stackPane,Constants.getBorodinoMap());
         playMusic(stackPane, Constants.getAudio2());
@@ -151,6 +161,7 @@ public class GameInterface {
         stage.setScene(new Scene(stackPane));
         stage.show();
     }
+
 
     public static void helpInterface(Stage stage){
 
@@ -169,7 +180,9 @@ public class GameInterface {
         stage.show();
     }
 
-    public  void createChessBoard(StackPane stackPane){
+
+
+    public void createChessBoard(StackPane stackPane){
         GridPane pane = new GridPane();
 
         int count = 0;
@@ -212,9 +225,9 @@ public class GameInterface {
                     count++;
 
                 Position position = new Position((char)('A' + j -1), 9-i);
-                PieceType piece = board.getPieceAtPosition(position);
+                PieceType piece = currentPlayer.getBoard().getPieceAtPosition(position);
 
-                if(piece != null){
+                if(piece != PieceType.NONE){
                     ImageView pieceImage = new ImageView(Constants.getPiecePath(piece,"white"));
                     addPieceMouseListener(pieceImage, piece, pane);
                     pane.add(pieceImage,j,i);
@@ -228,24 +241,7 @@ public class GameInterface {
         stackPane.getChildren().add(pane);
     }
 
-    public void printChessConfiguration(){
-        GridPane pane = new GridPane();
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
 
-                Position position = new Position((char)('A' + j -1), 9-i);
-                PieceType piece = currentPlayer.getBoard().getPieceAtPosition(position);
-
-                if(piece != null){
-                    ImageView pieceImage = new ImageView(Constants.getPiecePath(piece,"white"));
-                    addPieceMouseListener(pieceImage, piece, pane);
-                    pane.add(pieceImage,j,i);
-                }
-            }
-        }
-        pane.setAlignment(Pos.CENTER);
-        stackPane.getChildren().add(pane);
-    }
 
     private  void addPieceMouseListener(ImageView imageView, PieceType pieceType, GridPane pane){
         imageView.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -266,14 +262,14 @@ public class GameInterface {
         imageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                /*synchronized (mutex){
-                    chosen = true;
-                    mutex.notify();
-                }*/
+
                 Rectangle target = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
                 lastMove = getMove(pieceType, target);
-                mouseEvent.consume();
 
+                synchronized (mutex){
+                    chosen = true;
+                    mutex.notify();
+                }
             }
         });
     }

@@ -8,43 +8,25 @@ public class HumanPlayer extends Player {
 
     private Move attemptedMove;
 
-    public HumanPlayer(String name, String color, Game game) {
-        super(name, color, game);
+    public HumanPlayer(String name, String color) {
+        super(name, color);
     }
 
     @Override
-    public void setAttemptedMove(Move move){
-        this.attemptedMove = move;
-    }
-
-//    public void waitTurn(){
-//        synchronized (this.game.getGameInterface().mutex){
-//            while (!game.getGameInterface().chosen) {
-//                try {
-//                    game.getGameInterface().mutex.wait();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//        System.out.println(attemptedMove.getPieceType().toString());
-//    }
-
-    @Override
-    public Move chooseMove() {
+    public Move attemptMove() {
         Move move;
-        synchronized (this.game.getGameInterface().mutex) {
-            while (!game.getGameInterface().chosen) {
-                try {
-                    game.getGameInterface().mutex.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        synchronized (game.getGUI().mutex){
+            while(!game.getGUI().chosen){
+                try{
+                    game.getGUI().mutex.wait();
+                }catch (InterruptedException exc){
+                    exc.printStackTrace();
                 }
             }
         }
-        move = game.getGameInterface().lastMove;
-        System.out.println(attemptedMove.getPieceType().toString());
+        move = game.getGUI().lastMove;
         return move;
     }
+
 
 }

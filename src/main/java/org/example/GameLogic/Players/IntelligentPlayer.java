@@ -4,28 +4,13 @@ import org.example.GameLogic.Game;
 import org.example.GameLogic.Move;
 
 public class IntelligentPlayer extends Player{
-    public IntelligentPlayer(String name, String color, Game game) {
-        super(name, color, game);
+
+    public IntelligentPlayer(String name, String color){
+        super(name, color);
     }
 
     @Override
-    public void setAttemptedMove(Move move) {
-
-    }
-
-    @Override
-    public void waitTurn() {
-
-    }
-
-    @Override
-    public Move chooseMove() {
+    public Move attemptMove() {
         return null;
-    }
-
-
-    @Override
-    public void run() {
-
     }
 }
