@@ -73,6 +73,38 @@ public class Board {
         System.out.println(count);
     }
 
+    public static List<PiecePosition> getInitialConfiguration(){
+        List<PiecePosition> configuration = new ArrayList<>();
+        for(int i=1;i<=8;i++){
+            char letter = (char)('A' + i -1);
+            Position position = new Position(letter,2);
+            configuration.add(new PiecePosition(position, PieceType.PAWN, "white"));
+
+            for(int j=3; j<=8; j++){
+                configuration.add(new PiecePosition(new Position(letter,j), PieceType.NONE, "white") );
+            }
+        }
+       configuration.add(new PiecePosition(new Position('A',1),PieceType.ROOK, "white"));
+       configuration.add(new PiecePosition(new Position('B',1),PieceType.BISHOP, "white"));
+       configuration.add(new PiecePosition(new Position('C',1), PieceType.KING, "white"));
+       configuration.add(new PiecePosition(new Position('D',1), PieceType.KNIGHT, "white"));
+       configuration.add(new PiecePosition(new Position('E',1), PieceType.BISHOP, "white"));
+       configuration.add(new PiecePosition(new Position('F',1),PieceType.KNIGHT, "white"));
+       configuration.add(new PiecePosition(new Position('G',1), PieceType.ROOK, "white"));
+       configuration.add(new PiecePosition(new Position('H',1), PieceType.QUEEN, "white"));
+
+       return configuration;
+    }
+    public boolean isInitial(){
+        List<PiecePosition> initial = getInitialConfiguration();
+        for(PiecePosition piecePosition : initial){
+            if(!piecePosition.getPieceType().equals(getPieceAtPosition(piecePosition.getPosition()))){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 
 

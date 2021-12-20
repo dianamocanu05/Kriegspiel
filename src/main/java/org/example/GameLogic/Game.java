@@ -73,6 +73,8 @@ public class Game {
                 GUI.gameInterface(stage);
             }
         });
+
+
         switchPlayer();
     }
 }

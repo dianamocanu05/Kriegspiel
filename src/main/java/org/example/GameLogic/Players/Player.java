@@ -11,7 +11,7 @@ public abstract class Player implements Runnable {
     private String color;
     private Board board;
     protected Thread thread;
-    protected Game game;
+    protected  Game game;
 
     public Player(String name, String color) {
         this.name = name;
