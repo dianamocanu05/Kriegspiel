@@ -7,12 +7,15 @@ import org.example.GameLogic.Players.IntelligentPlayer;
 import org.example.GameLogic.Players.Player;
 import org.example.GameLogic.Players.Referee;
 
-public class Game implements Runnable{
+import java.util.ArrayList;
+import java.util.List;
+
+public class Game{
 
     private GameInterface gameInterface;
     private Player currentPlayer, nextPlayer;
     private Referee referee;
-
+    private List<Player> players;
     public Game(){
 
     }
@@ -36,6 +39,10 @@ public class Game implements Runnable{
         IntelligentPlayer intelligentPlayer = new IntelligentPlayer("Marshall Kutuzov", "black", this);
         intelligentPlayer.setBoard(boardTwo);
 
+        players = new ArrayList<>();
+        players.add(humanPlayer); players.add(intelligentPlayer);
+
+
         currentPlayer = humanPlayer;
         nextPlayer = intelligentPlayer;
 
@@ -44,23 +51,30 @@ public class Game implements Runnable{
 
     }
 
+    public void start(){
+        for(Player player : players) {
+            Thread thread = new Thread(player);
+            thread.start();
+        }
+        run();
+    }
 
-    @Override
     public void run() {
-        while(true){
+        //while(true){
             System.out.println(currentPlayer.getName() + " (" + currentPlayer.getColor() + ")'S TURN");
 
             gameInterface.setCurrentPlayer(currentPlayer);
 
-            currentPlayer.waitTurn();
+            currentPlayer.run();
             Move attemptedMove = currentPlayer.getAttemptedMove();
             if (referee.announce(currentPlayer, attemptedMove)){
                 gameInterface.printChessConfiguration();
+                updateBoard(attemptedMove);
             }
             nextPlayer = currentPlayer;
             currentPlayer = nextPlayer;
 
-        }
+        //}
     }
 
     public void updateBoard(Move move){

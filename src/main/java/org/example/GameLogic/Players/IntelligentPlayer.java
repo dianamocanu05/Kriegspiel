@@ -18,5 +18,14 @@ public class IntelligentPlayer extends Player{
 
     }
 
+    @Override
+    public Move chooseMove() {
+        return null;
+    }
 
+
+    @Override
+    public void run() {
+
+    }
 }

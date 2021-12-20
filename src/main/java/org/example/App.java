@@ -19,7 +19,7 @@ public class App extends Application {
         Game game = new Game();
         game.initialize(stage);
 
-        game.run();
+        game.start();
     }
 
     public static void main(String[] args) {

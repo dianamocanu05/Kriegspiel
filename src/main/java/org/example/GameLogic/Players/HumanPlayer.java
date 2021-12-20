@@ -17,8 +17,23 @@ public class HumanPlayer extends Player {
         this.attemptedMove = move;
     }
 
-    public void waitTurn(){
-        synchronized (this.game.getGameInterface().mutex){
+//    public void waitTurn(){
+//        synchronized (this.game.getGameInterface().mutex){
+//            while (!game.getGameInterface().chosen) {
+//                try {
+//                    game.getGameInterface().mutex.wait();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        System.out.println(attemptedMove.getPieceType().toString());
+//    }
+
+    @Override
+    public Move chooseMove() {
+        Move move;
+        synchronized (this.game.getGameInterface().mutex) {
             while (!game.getGameInterface().chosen) {
                 try {
                     game.getGameInterface().mutex.wait();
@@ -27,6 +42,9 @@ public class HumanPlayer extends Player {
                 }
             }
         }
+        move = game.getGameInterface().lastMove;
+        System.out.println(attemptedMove.getPieceType().toString());
+        return move;
     }
 
 }

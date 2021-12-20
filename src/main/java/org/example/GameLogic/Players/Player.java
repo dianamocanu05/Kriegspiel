@@ -5,7 +5,7 @@ import org.example.GameLogic.Game;
 import org.example.GameLogic.Move;
 import org.example.GameLogic.PiecePosition;
 
-public abstract class Player {
+public abstract class Player implements Runnable{
 
     private String name;
     private String color;
@@ -41,9 +41,20 @@ public abstract class Player {
         return color;
     }
 
-    public abstract void waitTurn();
 
-    ;
+    public void waitTurn(){
+
+    }
+
+
+    public abstract Move chooseMove();
+
+    @Override
+    public void run(){
+        chooseMove();
+        game.getGameInterface().chosen = false;
+    }
+
 
 
 }

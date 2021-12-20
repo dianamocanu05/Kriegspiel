@@ -44,9 +44,9 @@ public class GameInterface {
     private static Player currentPlayer;
     private StackPane stackPane;
 
+    public Move lastMove;
     public final Object mutex = new Object();
     public boolean chosen = false;
-    public Move currentMove;
 
     public GameInterface(Stage stage, Board board){
         this.stage = stage;
@@ -54,7 +54,6 @@ public class GameInterface {
     }
     public void initialize(){
         initScreen();
-
     }
 
     public void initScreen(){
@@ -76,6 +75,7 @@ public class GameInterface {
         Scene scene = new Scene(stackPane);
         stage.setScene(scene);
         stage.show();
+
     }
 
     public void setCurrentPlayer(Player currentPlayer){
@@ -143,7 +143,7 @@ public class GameInterface {
         });
     }
 
-    public  void gameInterface(Stage stage){
+    public void gameInterface(Stage stage){
         StackPane stackPane = new StackPane();
         addImage(stackPane,Constants.getBorodinoMap());
         playMusic(stackPane, Constants.getAudio2());
@@ -266,12 +266,12 @@ public class GameInterface {
         imageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                synchronized (mutex){
+                /*synchronized (mutex){
                     chosen = true;
                     mutex.notify();
-                }
+                }*/
                 Rectangle target = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
-                currentPlayer.setAttemptedMove(getMove(pieceType, target));
+                lastMove = getMove(pieceType, target);
                 mouseEvent.consume();
 
             }
