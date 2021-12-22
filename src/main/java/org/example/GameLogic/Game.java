@@ -46,21 +46,36 @@ public class Game {
 
     public void switchPlayer() {
         this.currentPlayer = players.get(1 - players.indexOf(currentPlayer));
-    }
+        try {
+            Thread.sleep(2 * 1000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        }
 
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
+    public Player getHumanPlayer(){
+        for(Player player : players){
+            if(player instanceof HumanPlayer){
+                return player;
+            }
+        }
+        return null;
+    }
+
     public void update() throws InterruptedException {
 
-        Move move = GUI.lastMove;
+        Move move = currentPlayer.getLastMove();
         String message = referee.announce(currentPlayer, move);
-        //GUI.displayButlerMessage(message);
+        GUI.displayButlerMessage(message);
         GUI.removeCurrentPlayerName();
-        //GUI.removeButlerMessage();
         switchPlayer();
         GUI.displayCurrentPlayerName();
+        GUI.removeButlerMessage();
+
     }
 
 

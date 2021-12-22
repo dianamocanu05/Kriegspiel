@@ -15,21 +15,17 @@ public abstract class Player implements Runnable{
     private Board board;
     protected Game game;
     private Thread thread;
+    protected Move lastMove;
 
     public Player(String name, String color) {
         this.name = name;
         this.color = color;
     }
 
-    public Move attemptMove() throws InterruptedException {
-        synchronized (game.getGUI().mutex){
-            while(!game.getGUI().chosen){
-                game.getGUI().mutex.wait();
-            }
-        }
-        return game.getGUI().lastMove;
-    }
+    public Move getLastMove(){ return lastMove;}
 
+
+    public abstract Move attemptMove() throws InterruptedException;
     public void setBoard(Board board) {
         this.board = board;
     }
@@ -85,8 +81,9 @@ public abstract class Player implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            game.getGUI().chosen = false;
+                if(this instanceof HumanPlayer) {
+                    game.getGUI().chosen = false;
+                }
 
             try {
                 game.update();

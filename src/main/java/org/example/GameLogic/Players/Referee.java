@@ -8,7 +8,7 @@ public class Referee {
     public Referee(){};
 
     public String announce(Player currentPlayer, Move attemptedMove){
-        System.out.print("Referee said to " + currentPlayer.getName() + ":");
+        System.out.println(attemptedMove.getPieceType().toString());
         if(attemptedMove.isMoveLegal()){
             return "YES, SIR";
         }

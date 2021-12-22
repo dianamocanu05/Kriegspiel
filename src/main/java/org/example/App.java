@@ -25,7 +25,7 @@ public class App extends Application {
         humanPlayer.setBoard(new Board());
         humanPlayer.setGame(game);
 
-        HumanPlayer intelligentPlayer = new HumanPlayer("Marshall Kutuzov", "black");
+        IntelligentPlayer intelligentPlayer = new IntelligentPlayer("Marshall Kutuzov", "black");
         intelligentPlayer.setBoard(new Board());
         intelligentPlayer.setGame(game);
 

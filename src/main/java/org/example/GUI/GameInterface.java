@@ -12,15 +12,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -53,7 +51,7 @@ public class GameInterface {
     private final Group playerName =  new Group();
     private final Group messageGroup = new Group();
     private Text name;
-    private Text butlerMessage;
+    private TextArea butlerMessage;
 
     public Move lastMove;
 
@@ -147,8 +145,10 @@ public class GameInterface {
         Utils.playMusic(gamePane, Constants.getAudio2());
         Utils.addButler(gamePane);
         createChessBoard(gamePane);
+
         gamePane.getChildren().add(playerName);
-       // gamePane.getChildren().add(messageGroup);
+        gamePane.getChildren().add(messageGroup);
+
         stage.setScene(new Scene(gamePane));
         stage.show();
 
@@ -282,9 +282,6 @@ public class GameInterface {
         int i = GridPane.getRowIndex(target);
         int j = GridPane.getColumnIndex(target);
 
-        Position newPosition = new Position((char) ('A' + j - 1), 9 - i);
-        Position oldPosition = new Position((char) ('A' + GridPane.getColumnIndex(initial) - 1), 9 - GridPane.getRowIndex(initial));
-
         pane.getChildren().remove(piece);
         pane.add(piece, j, i);
     }
@@ -311,7 +308,7 @@ public class GameInterface {
     }
 
     public void removeButlerMessage(){
-        Utils.removeButlerMessage(gamePane,butlerMessage);
+        Utils.removeButlerMessage(messageGroup,butlerMessage);
     }
 
 }

@@ -12,5 +12,16 @@ public class HumanPlayer extends Player {
         super(name, color);
     }
 
+   @Override
+    public Move attemptMove() throws InterruptedException {
+        synchronized (game.getGUI().mutex){
+            while(!game.getGUI().chosen){
+                game.getGUI().mutex.wait();
+            }
+        }
+        lastMove = game.getGUI().lastMove;
+        return lastMove;
+    }
+
 
 }

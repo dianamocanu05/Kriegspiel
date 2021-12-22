@@ -5,6 +5,7 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Node;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -77,14 +78,15 @@ public class Utils {
         });
     }
 
-    public static Text addButlerMessage(Group group, String announce) {
-        Text bubbleView = new Text();
+    public static TextArea addButlerMessage(Group group, String announce) {
+        TextArea bubbleView = new TextArea();
         bubbleView.setText(announce);
         bubbleView.setStyle(Constants.getButlerStringFont());
-        bubbleView.setFill(Color.RED);
-        bubbleView.setTranslateX((float) -1 * Constants.getWidth() / 2 + 140);
-        bubbleView.setTranslateY((float) Constants.getHeight() / 2 - 120);
-
+        bubbleView.setMaxSize(50,10);
+        //bubbleView.setTranslateX((float) -1 * Constants.getWidth() / 2 + 140);
+        //bubbleView.setTranslateY((float) Constants.getHeight() / 2 - 120);
+        bubbleView.setTranslateX((float)-1*Constants.getWidth());
+        bubbleView.setTranslateY((float) -1*Constants.getHeight());
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -94,12 +96,11 @@ public class Utils {
         return bubbleView;
     }
 
-    public static void removeButlerMessage(StackPane stackPane, Text message) {
+    public static void removeButlerMessage(Group group, TextArea message) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                stackPane.getChildren().remove(message);
-
+                group.getChildren().remove(message);
             }
         });
     }
