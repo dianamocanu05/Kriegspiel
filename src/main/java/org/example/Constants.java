@@ -24,6 +24,8 @@ public class Constants {
     private static final Font font = Font.font("Stencil", FontWeight.BOLD, 36);
     private static final Font littleFont = Font.font("Stencil", FontWeight.BOLD, 12);
     private static final String stringFont = "-fx-font: 36 Stencil";
+    private static final String butlerStringFont = "-fx-font: 30 Stencil";
+
 
 
     public static int getHeight(){
@@ -51,6 +53,7 @@ public class Constants {
         return littleFont;
     }
     public static String getStringFont(){return stringFont;}
+    public static String getButlerStringFont(){return butlerStringFont;}
     public static String getBorodinoMap(){
         return borodinoMap;
     }

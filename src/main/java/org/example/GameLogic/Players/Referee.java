@@ -7,14 +7,12 @@ public class Referee {
 
     public Referee(){};
 
-    public boolean announce(Player currentPlayer, Move attemptedMove){
+    public String announce(Player currentPlayer, Move attemptedMove){
         System.out.print("Referee said to " + currentPlayer.getName() + ":");
         if(attemptedMove.isMoveLegal()){
-            System.out.println("YES, SIR");
-            return true;
+            return "YES, SIR";
         }
-        System.out.println("NO, SIR");
-        return false;
+        return "NO, SIR";
     }
 
 }

@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -45,13 +46,14 @@ public class GameInterface {
     private static Rectangle initial;
     private Player currentPlayer;
     private StackPane stackPane;
+    private StackPane gamePane;
     private Game game;
     public boolean chosen = false;
     public final Object mutex = new Object();
-    private Group playerName =  new Group();
-    private Group butlerGroup = new Group();
+    private final Group playerName =  new Group();
+    private final Group messageGroup = new Group();
     private Text name;
-    private ImageView butler;
+    private Text butlerMessage;
 
     public Move lastMove;
 
@@ -140,13 +142,14 @@ public class GameInterface {
         this.currentPlayer = game.getCurrentPlayer();
 
         stage.close();
-        StackPane stackPane = new StackPane();
-        Utils.addImage(stackPane, Constants.getBorodinoMap());
-        Utils.playMusic(stackPane, Constants.getAudio2());
-        createChessBoard(stackPane);
-        stackPane.getChildren().add(playerName);
-        stackPane.getChildren().add(butlerGroup);
-        stage.setScene(new Scene(stackPane));
+        gamePane = new StackPane();
+        Utils.addImage(gamePane, Constants.getBorodinoMap());
+        Utils.playMusic(gamePane, Constants.getAudio2());
+        Utils.addButler(gamePane);
+        createChessBoard(gamePane);
+        gamePane.getChildren().add(playerName);
+       // gamePane.getChildren().add(messageGroup);
+        stage.setScene(new Scene(gamePane));
         stage.show();
 
     }
@@ -303,12 +306,12 @@ public class GameInterface {
         Utils.removeNameText(name, playerName);
     }
 
-    public void displayButler(){
-        butler = Utils.addButler(butlerGroup);
+    public void displayButlerMessage(String message){
+        butlerMessage = Utils.addButlerMessage(messageGroup, message);
     }
 
-    public void removeButler(){
-        Utils.removeButler(butler,butlerGroup);
+    public void removeButlerMessage(){
+        Utils.removeButlerMessage(gamePane,butlerMessage);
     }
 
 }

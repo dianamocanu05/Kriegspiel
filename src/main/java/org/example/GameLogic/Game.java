@@ -55,10 +55,10 @@ public class Game {
     public void update() throws InterruptedException {
 
         Move move = GUI.lastMove;
-        referee.announce(currentPlayer, move);
-        GUI.displayButler();
+        String message = referee.announce(currentPlayer, move);
+        //GUI.displayButlerMessage(message);
         GUI.removeCurrentPlayerName();
-        GUI.removeButler();
+        //GUI.removeButlerMessage();
         switchPlayer();
         GUI.displayCurrentPlayerName();
     }
