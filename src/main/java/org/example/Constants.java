@@ -14,6 +14,8 @@ public class Constants {
     private static final String audio2 = "media/audio2.mp3";
     private static final Font font = Font.font("Stencil", FontWeight.BOLD, 36);
     private static final Font littleFont = Font.font("Stencil", FontWeight.BOLD, 12);
+    private static final String stringFont = "-fx-font: 36 Stencil";
+
 
     public static int getHeight(){
         return HEIGHT;
@@ -47,6 +49,8 @@ public class Constants {
     public static Font getLittleFont(){
         return littleFont;
     }
+
+    public static String getStringFont(){return stringFont;}
 
     public static String getBorodinoMap(){
         return borodinoMap;

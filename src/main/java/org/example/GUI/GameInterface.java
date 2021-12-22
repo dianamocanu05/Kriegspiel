@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,6 +24,7 @@ import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -46,6 +48,8 @@ public class GameInterface {
     private Game game;
     public boolean chosen = false;
     public final Object mutex = new Object();
+    private Group playerName =  new Group();
+    private Text name;
 
     public Move lastMove;
 
@@ -61,8 +65,8 @@ public class GameInterface {
 
     public void initScreen() {
         stackPane = new StackPane();
-        playMusic(stackPane, Constants.getAudio1());
-        addImage(stackPane, Constants.getBackgroundImg());
+        Utils.playMusic(stackPane, Constants.getAudio1());
+        Utils.addImage(stackPane, Constants.getBackgroundImg());
         VBox vbox = new VBox();
         vbox.setSpacing(10);
         vbox.setAlignment(Pos.BOTTOM_CENTER);
@@ -82,23 +86,7 @@ public class GameInterface {
     }
 
 
-    public static void addImage(StackPane stackPane, String imgPath) {
-        Image image = new Image(imgPath);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(Constants.getHeight());
-        imageView.setFitWidth(Constants.getWidth());
-        stackPane.getChildren().add(imageView);
-    }
 
-    public static void playMusic(StackPane stackPane, String audioPath) {
-        MediaView view = new MediaView();
-        Media soundtrack = new Media(new File(audioPath).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(soundtrack);
-        view.setMediaPlayer(mediaPlayer);
-        stackPane.getChildren().add(view);
-        mediaPlayer.play();
-
-    }
 
     public Button addButton(StackPane stackPane, String text, Stage stage) {
         Button button = new Button(text);
@@ -151,9 +139,10 @@ public class GameInterface {
 
         stage.close();
         StackPane stackPane = new StackPane();
-        addImage(stackPane, Constants.getBorodinoMap());
-        playMusic(stackPane, Constants.getAudio2());
+        Utils.addImage(stackPane, Constants.getBorodinoMap());
+        Utils.playMusic(stackPane, Constants.getAudio2());
         createChessBoard(stackPane);
+        stackPane.getChildren().add(playerName);
         stage.setScene(new Scene(stackPane));
         stage.show();
 
@@ -170,8 +159,8 @@ public class GameInterface {
     public void aboutInterface(Stage stage) {
         stage.close();
         StackPane stackPane = new StackPane();
-        addImage(stackPane, Constants.getAboutImg());
-        playMusic(stackPane, Constants.getAudio1());
+        Utils.addImage(stackPane, Constants.getAboutImg());
+        Utils.playMusic(stackPane, Constants.getAudio1());
         Button back = addButton(stackPane, "Back", stage, 100, 5, Constants.getLittleFont());
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.BOTTOM_RIGHT);
@@ -302,4 +291,13 @@ public class GameInterface {
         }
         return null;
     }
+
+    public void displayCurrentPlayerName(){
+        name = Utils.addNameText(game.getCurrentPlayer().getName(),playerName);
+    }
+
+    public void removeCurrentPlayerName(){
+        Utils.removeNameText(name, playerName);
+    }
+
 }

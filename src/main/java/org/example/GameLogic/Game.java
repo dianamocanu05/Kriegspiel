@@ -26,8 +26,8 @@ public class Game {
         players = new ArrayList<>();
     }
 
-    private void initPlayers(){
-        for(Player player : players){
+    private void initPlayers() {
+        for (Player player : players) {
             Thread thread = new Thread(player);
             player.setThread(thread);
             thread.start();
@@ -54,9 +54,12 @@ public class Game {
 
     public void update() throws InterruptedException {
 
-            Move move = GUI.lastMove;
-            referee.announce(currentPlayer, move);
-            switchPlayer();
+        Move move = GUI.lastMove;
+        referee.announce(currentPlayer, move);
+
+        GUI.removeCurrentPlayerName();
+        switchPlayer();
+        GUI.displayCurrentPlayerName();
     }
 
 
