@@ -8,6 +8,7 @@ public class Referee {
     public Referee(){};
 
     public boolean announce(Player currentPlayer, Move attemptedMove){
+        System.out.print("Referee said to " + currentPlayer.getName() + ":");
         if(attemptedMove.isMoveLegal()){
             System.out.println("YES, SIR");
             return true;

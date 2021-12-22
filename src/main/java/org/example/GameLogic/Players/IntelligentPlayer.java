@@ -9,8 +9,4 @@ public class IntelligentPlayer extends Player{
         super(name, color);
     }
 
-    @Override
-    public Move attemptMove() {
-        return null;
-    }
 }

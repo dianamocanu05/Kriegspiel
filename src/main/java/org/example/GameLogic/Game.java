@@ -18,21 +18,33 @@ public class Game {
     private Player currentPlayer;
     private Referee referee;
     private List<Player> players;
+    private Stage stage;
 
-    public Game() {
+
+    public Game(Stage stage) {
+        this.stage = stage;
         players = new ArrayList<>();
     }
 
-    public void initPlayers() {
-        
+    private void initPlayers(){
+        for(Player player : players){
+            Thread thread = new Thread(player);
+            player.setThread(thread);
+            thread.start();
+        }
     }
 
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
+    public void start() {
+        referee = new Referee();
+        currentPlayer = players.get(0);
+        GUI = new GameInterface(this.stage);
+        GUI.setGame(this);
+        GUI.initialize();
+        initPlayers();
     }
+
 
     public void switchPlayer() {
-        System.out.println("switched player");
         this.currentPlayer = players.get(1 - players.indexOf(currentPlayer));
     }
 
@@ -40,17 +52,11 @@ public class Game {
         return currentPlayer;
     }
 
-    public void updatePlayer(Player oldPlayer, Player newPlayer){
-        players.set(players.indexOf(oldPlayer), newPlayer);
-    }
+    public void update() throws InterruptedException {
 
-    public void start() {
-
-        setCurrentPlayer(players.get(0));
-        initPlayers();
-        GUI.setCurrentPlayer(currentPlayer);
-        GUI.initialize();
-
+            Move move = GUI.lastMove;
+            referee.announce(currentPlayer, move);
+            switchPlayer();
     }
 
 
@@ -62,12 +68,4 @@ public class Game {
         return GUI;
     }
 
-    public void setGUI(GameInterface GUI) {
-        this.GUI = GUI;
-    }
-
-    public void update() {
-        System.out.println("");
-        switchPlayer();
-    }
 }

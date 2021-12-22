@@ -8,33 +8,26 @@ import org.example.GameLogic.PiecePosition;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class Player {
+public abstract class Player implements Runnable{
 
     private String name;
     private String color;
     private Board board;
-    protected  Game game;
-    private final AtomicBoolean signal = new AtomicBoolean(false);
-
+    protected Game game;
+    private Thread thread;
 
     public Player(String name, String color) {
         this.name = name;
         this.color = color;
     }
 
-    public Move attemptMove(){
-        Move move;
+    public Move attemptMove() throws InterruptedException {
         synchronized (game.getGUI().mutex){
             while(!game.getGUI().chosen){
-                try{
-                    game.getGUI().mutex.wait();
-                }catch (InterruptedException exc){
-                    exc.printStackTrace();
-                }
+                game.getGUI().mutex.wait();
             }
         }
-        move = game.getGUI().lastMove;
-        return move;
+        return game.getGUI().lastMove;
     }
 
     public void setBoard(Board board) {
@@ -59,34 +52,51 @@ public abstract class Player {
     }
 
 
+    private void waitTurn() throws InterruptedException {
+        synchronized (game) {
 
-
-    public void run() {
-        while (true){
-            while(!signal.get()){
-                synchronized (signal){
-                    try {
-                        signal.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+            while (!game.getCurrentPlayer().equals(this)) {
+                this.game.wait();
             }
-            signal.set(false);
 
+        }
+
+    }
+    public void setThread(Thread thread) {
+        this.thread = thread;
+    }
+
+
+
+
+    @Override
+    public void run(){
+        while (true){
+            try {
+                waitTurn();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.out.println(this.getName() + "'S TURN");
 
-            Move move = attemptMove();
-            Player oldPlayer = this;
-            List<PiecePosition> newConf = this.board.replace(move);
-            Board board = new Board();
-            board.setConfiguration(newConf);
-            this.board = board;
-            game.updatePlayer(oldPlayer, this);
-            game.update();
+            Move move = null;
+            try {
+                move = attemptMove();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-            signal.set(true);
-            signal.notify();
+            game.getGUI().chosen = false;
+
+            try {
+                game.update();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            synchronized (game) {
+                this.game.notify();
+            }
+
         }
     }
 

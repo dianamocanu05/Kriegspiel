@@ -19,28 +19,21 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
 
-
-        GameInterface gameInterface = new GameInterface(stage);
-        Game game = new Game();
-        game.setGUI(gameInterface);
-
-
-        Board boardOne = new Board();
-        Board boardTwo = new Board();
-
+        Game game = new Game(stage);
 
         HumanPlayer humanPlayer = new HumanPlayer("Emperor Napoleon", "white");
-        humanPlayer.setBoard(boardOne);
+        humanPlayer.setBoard(new Board());
         humanPlayer.setGame(game);
 
         HumanPlayer intelligentPlayer = new HumanPlayer("Marshall Kutuzov", "black");
-        intelligentPlayer.setBoard(boardTwo);
+        intelligentPlayer.setBoard(new Board());
         intelligentPlayer.setGame(game);
 
         game.addPlayer(humanPlayer);
         game.addPlayer(intelligentPlayer);
 
         game.start();
+
     }
 
     public static void main(String[] args) {
