@@ -3,6 +3,7 @@ package org.example.GUI;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -56,4 +57,32 @@ public class Utils {
         stackPane.getChildren().add(view);
         mediaPlayer.play();
     }
+
+    public static ImageView addButler(Group group){
+        Image image = new Image(Constants.getButlerImg());
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(Constants.getHeight());
+        imageView.setFitWidth(Constants.getWidth());
+        group.setTranslateX(0); group.setTranslateY(Constants.getWidth());
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                group.getChildren().add(imageView);
+            }
+        });
+        return imageView;
+    }
+
+    public static void removeButler(ImageView imageView, Group group){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                group.getChildren().remove(imageView);
+
+            }
+        });
+    }
+
+
 }

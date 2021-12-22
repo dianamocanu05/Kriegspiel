@@ -49,7 +49,9 @@ public class GameInterface {
     public boolean chosen = false;
     public final Object mutex = new Object();
     private Group playerName =  new Group();
+    private Group butlerGroup = new Group();
     private Text name;
+    private ImageView butler;
 
     public Move lastMove;
 
@@ -143,6 +145,7 @@ public class GameInterface {
         Utils.playMusic(stackPane, Constants.getAudio2());
         createChessBoard(stackPane);
         stackPane.getChildren().add(playerName);
+        stackPane.getChildren().add(butlerGroup);
         stage.setScene(new Scene(stackPane));
         stage.show();
 
@@ -298,6 +301,14 @@ public class GameInterface {
 
     public void removeCurrentPlayerName(){
         Utils.removeNameText(name, playerName);
+    }
+
+    public void displayButler(){
+        butler = Utils.addButler(butlerGroup);
+    }
+
+    public void removeButler(){
+        Utils.removeButler(butler,butlerGroup);
     }
 
 }

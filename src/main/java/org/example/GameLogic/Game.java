@@ -56,8 +56,9 @@ public class Game {
 
         Move move = GUI.lastMove;
         referee.announce(currentPlayer, move);
-
+        GUI.displayButler();
         GUI.removeCurrentPlayerName();
+        GUI.removeButler();
         switchPlayer();
         GUI.displayCurrentPlayerName();
     }
