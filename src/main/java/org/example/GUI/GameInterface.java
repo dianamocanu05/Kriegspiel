@@ -3,6 +3,7 @@ package org.example.GUI;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -60,8 +61,14 @@ public class GameInterface {
         initScreen();
     }
 
-    public StackPane getGamePane(){ return gamePane;}
-    public Text getPlayerName(){ return playerName;}
+    public StackPane getGamePane() {
+        return gamePane;
+    }
+
+    public Text getPlayerName() {
+        return playerName;
+    }
+
     public void initScreen() {
         stackPane = new StackPane();
         Utils.playMusic(stackPane, Constants.getAudio1());
@@ -83,8 +90,6 @@ public class GameInterface {
         stage.show();
 
     }
-
-
 
 
     public Button addButton(StackPane stackPane, String text, Stage stage) {
@@ -144,13 +149,13 @@ public class GameInterface {
         Utils.addButler(gamePane);
         Utils.addHistory(gamePane);
         createChessBoard(gamePane);
-        playerName = Utils.addNameText(currentPlayer.getName(),gamePane);
+        playerName = Utils.addNameText(currentPlayer.getName(), gamePane);
         stage.setScene(new Scene(gamePane));
         stage.show();
 
     }
 
-    public void setGame(Game game){
+    public void setGame(Game game) {
         this.game = game;
     }
 
@@ -215,8 +220,13 @@ public class GameInterface {
                 pane.add(rectangle, j, i);
                 count++;
 
+
+                //Point2D coord = rectangle.localToParent(rectangle.getX(),rectangle.getY());
+                Utils.addTooltip(rectangle);
+
                 Position position = new Position((char) ('A' + j - 1), 9 - i);
                 PieceType piece = currentPlayer.getBoard().getPieceAtPosition(position);
+
                 if (piece != PieceType.NONE) {
                     ImageView pieceImage = new ImageView(Constants.getPiecePath(piece, currentPlayer.getColor()));
                     addPieceMouseListener(pieceImage, piece, pane);
@@ -254,7 +264,7 @@ public class GameInterface {
 
                 Rectangle target = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
                 lastMove = getMove(pieceType, target);
-                synchronized (mutex){
+                synchronized (mutex) {
                     chosen = true;
                     mutex.notify();
                 }

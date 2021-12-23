@@ -209,7 +209,7 @@ public class Move {
         return false;
     }
 
-    private  boolean isLMove(){
+    private boolean isLMove(){
         int initialNumber = initial.getNumber();
         char initialLetter = initial.getLetter();
 

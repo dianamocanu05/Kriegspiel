@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,9 +21,12 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.example.Constants;
+import org.example.GameLogic.Position;
 
 import java.io.File;
 
@@ -101,7 +105,7 @@ public class Utils {
         imageView.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                history.setX(0); history.setX(0);
+                history.setX(300); history.setY(300);
                 history.setTitle("Previous orders");
                 history.setScene(createHistoryLogs());
                 history.show();
@@ -156,6 +160,39 @@ public class Utils {
         imageView.setFitWidth(300);
         scrollPane.setContent(imageView);
         return new Scene(scrollPane);
+    }
+
+    public static void addTooltip(Rectangle rectangle){
+        Tooltip tp = new Tooltip("info");
+        tp.setStyle(Constants.getLittleStringFont());
+        final double[] x = new double[1];
+        final double[] y = new double[1];
+
+        rectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                x[0] = mouseEvent.getScreenX();
+                y[0] = mouseEvent.getScreenY();
+            }
+        });
+
+        rectangle.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Tooltip.install(rectangle,tp);
+                tp.setShowDuration(new Duration(100));
+                tp.show(rectangle, x[0], y[0]);
+
+            }
+        });
+
+        rectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                tp.hide();
+                Tooltip.uninstall(rectangle,tp);
+            }
+        });
     }
 
 

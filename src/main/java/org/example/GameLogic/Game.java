@@ -22,6 +22,7 @@ public class Game {
     private List<Player> players;
     private Stage stage;
     private Text name, butlerMessage;
+    private Logger logger;
 
 
     public Game(Stage stage) {
@@ -38,6 +39,7 @@ public class Game {
     }
 
     public void start() {
+        logger = new Logger();
         referee = new Referee();
         currentPlayer = players.get(0);
         GUI = new GameInterface(this.stage);
@@ -64,6 +66,7 @@ public class Game {
 
         Move move = currentPlayer.getLastMove();
         String message = referee.announce(currentPlayer, move);
+        logger.addLog("Referee to " + currentPlayer.getName() + ": " + message);
         butlerMessage = Utils.addButlerMessage(GUI.getGamePane(), message);
         Thread.sleep(1000);
         Utils.removeNameText(name,GUI.getGamePane());
@@ -82,5 +85,7 @@ public class Game {
     public GameInterface getGUI() {
         return GUI;
     }
+
+    public Referee getReferee(){ return referee;}
 
 }
