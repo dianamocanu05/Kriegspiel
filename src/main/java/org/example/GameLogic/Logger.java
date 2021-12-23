@@ -4,7 +4,7 @@ public class Logger {
 
     private final StringBuilder stringBuilder;
     public Logger(){
-        stringBuilder = new StringBuilder();
+        stringBuilder = new StringBuilder("Battle started.\n");
     }
 
     public void addLog(String log){

@@ -58,6 +58,10 @@ public class Game {
         return currentPlayer;
     }
 
+    public boolean isEnded(){
+        return false;
+    }
+
 
     public void update() throws InterruptedException {
         while(name ==null) {
@@ -67,6 +71,7 @@ public class Game {
         Move move = currentPlayer.getLastMove();
         String message = referee.announce(currentPlayer, move);
         logger.addLog("Referee to " + currentPlayer.getName() + ": " + message);
+        Utils.updateHistory(GUI.getHistory(),logger);
         butlerMessage = Utils.addButlerMessage(GUI.getGamePane(), message);
         Thread.sleep(1000);
         Utils.removeNameText(name,GUI.getGamePane());

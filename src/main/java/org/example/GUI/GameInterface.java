@@ -2,6 +2,7 @@ package org.example.GUI;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -13,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
@@ -51,6 +53,7 @@ public class GameInterface {
     public final Object mutex = new Object();
     private Text playerName;
     public Move lastMove;
+    private ScrollPane history;
 
     public GameInterface(Stage stage) {
         this.stage = stage;
@@ -67,6 +70,10 @@ public class GameInterface {
 
     public Text getPlayerName() {
         return playerName;
+    }
+
+    public ScrollPane getHistory(){
+        return history;
     }
 
     public void initScreen() {
@@ -113,27 +120,24 @@ public class GameInterface {
     }
 
     public void addButtonMouseListener(Node node, String text, Stage stage) {
-        node.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                switch (text) {
-                    case "Play":
-                        try {
-                            gameInterface(stage);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case "Help":
-                        helpInterface(stage);
-                        break;
-                    case "About":
-                        aboutInterface(stage);
-                        break;
-                    case "Back":
-                        new GameInterface(stage).initialize();
-                        break;
-                }
+        node.setOnMouseClicked(mouseEvent -> {
+            switch (text) {
+                case "Play":
+                    try {
+                        gameInterface(stage);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "Help":
+                    helpInterface(stage);
+                    break;
+                case "About":
+                    aboutInterface(stage);
+                    break;
+                case "Back":
+                    new GameInterface(stage).initialize();
+                    break;
             }
         });
     }
@@ -147,7 +151,7 @@ public class GameInterface {
         Utils.addImage(gamePane, Constants.getBorodinoMap());
         Utils.playMusic(gamePane, Constants.getAudio2());
         Utils.addButler(gamePane);
-        Utils.addHistory(gamePane);
+        history = Utils.addHistory(gamePane);
         createChessBoard(gamePane);
         playerName = Utils.addNameText(currentPlayer.getName(), gamePane);
         stage.setScene(new Scene(gamePane));
@@ -243,34 +247,23 @@ public class GameInterface {
 
 
     private void addPieceMouseListener(ImageView imageView, PieceType pieceType, GridPane pane) {
-        imageView.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                initial = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
-                mouseEvent.consume();
-            }
+        imageView.setOnMousePressed(mouseEvent -> {
+            initial = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+            mouseEvent.consume();
         });
 
-        imageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent dragEvent) {
-                dragEvent.consume();
+        imageView.setOnMouseDragged(Event::consume);
+
+        imageView.setOnMouseReleased(mouseEvent -> {
+
+            Rectangle target = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+            lastMove = getMove(pieceType, target);
+            synchronized (mutex) {
+                chosen = true;
+                mutex.notify();
             }
-        });
+            movePiece(pieceType, imageView, pane, target);
 
-        imageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-
-                Rectangle target = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
-                lastMove = getMove(pieceType, target);
-                synchronized (mutex) {
-                    chosen = true;
-                    mutex.notify();
-                }
-                movePiece(pieceType, imageView, pane, target);
-
-            }
         });
     }
 

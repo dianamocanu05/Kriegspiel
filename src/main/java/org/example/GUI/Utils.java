@@ -26,6 +26,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.Constants;
+import org.example.GameLogic.Logger;
 import org.example.GameLogic.Position;
 
 import java.io.File;
@@ -92,7 +93,7 @@ public class Utils {
         });
     }
 
-    public static void addHistory(StackPane stackPane){
+    public static ScrollPane addHistory(StackPane stackPane){
         Image image = new Image(Constants.getBooksImg());
         ImageView imageView = new ImageView(image);
         //299 x 410
@@ -102,12 +103,21 @@ public class Utils {
         imageView.setTranslateY((float) -1 * Constants.getHeight() / 2 + 50);
 
         Stage history = new Stage();
+        ScrollPane scrollPane = new ScrollPane();
         imageView.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 history.setX(300); history.setY(300);
-                history.setTitle("Previous orders");
-                history.setScene(createHistoryLogs());
+                history.setTitle("War chronicle");
+                history.setWidth(300);
+                history.setHeight(500);
+                StackPane sp = new StackPane();
+
+                scrollPane.setStyle("-fx-background: #FACF7F; -fx-border-color: #FACF7F;");
+                //scrollPane.setStyle("-fx-background-image: url('" +Constants.getOldPaperImg()+ "');");
+                sp.getChildren().add(scrollPane);
+                Scene scene = new Scene(sp);
+                history.setScene(scene);
                 history.show();
             }
         });
@@ -124,6 +134,7 @@ public class Utils {
                 stackPane.getChildren().add(imageView);
             }
         });
+        return scrollPane;
     }
 
 
@@ -153,13 +164,14 @@ public class Utils {
         });
     }
 
-    private static Scene createHistoryLogs(){
-        ScrollPane scrollPane = new ScrollPane();
-        ImageView imageView = new ImageView(new Image(Constants.getOldPaperImg()));
-        imageView.setFitHeight(500);
-        imageView.setFitWidth(300);
-        scrollPane.setContent(imageView);
-        return new Scene(scrollPane);
+
+    public static void updateHistory(ScrollPane scrollPane, Logger logger){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                scrollPane.setContent(new Text(logger.getLogs()));
+            }
+        });
     }
 
     public static void addTooltip(Rectangle rectangle){
