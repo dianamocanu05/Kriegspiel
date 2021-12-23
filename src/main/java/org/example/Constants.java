@@ -24,7 +24,7 @@ public class Constants {
     private static final Font font = Font.font("Stencil", FontWeight.BOLD, 36);
     private static final Font littleFont = Font.font("Stencil", FontWeight.BOLD, 12);
     private static final String stringFont = "-fx-font: 36 Stencil";
-    private static final String butlerStringFont = "-fx-font: 24 Stencil";
+    private static final String butlerStringFont = "-fx-font: 30 Stencil";
 
 
 

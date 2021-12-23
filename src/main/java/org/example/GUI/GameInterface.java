@@ -44,15 +44,11 @@ public class GameInterface {
     private static Rectangle initial;
     private Player currentPlayer;
     private StackPane stackPane;
-    private StackPane gamePane;
+    private StackPane gamePane = new StackPane();
     private Game game;
     public boolean chosen = false;
     public final Object mutex = new Object();
-    private final Group playerName =  new Group();
-    private final Group messageGroup = new Group();
-    private Text name;
-    private TextArea butlerMessage;
-
+    private Text playerName;
     public Move lastMove;
 
     public GameInterface(Stage stage) {
@@ -64,7 +60,8 @@ public class GameInterface {
         initScreen();
     }
 
-
+    public StackPane getGamePane(){ return gamePane;}
+    public Text getPlayerName(){ return playerName;}
     public void initScreen() {
         stackPane = new StackPane();
         Utils.playMusic(stackPane, Constants.getAudio1());
@@ -140,15 +137,13 @@ public class GameInterface {
         this.currentPlayer = game.getCurrentPlayer();
 
         stage.close();
-        gamePane = new StackPane();
+
+
         Utils.addImage(gamePane, Constants.getBorodinoMap());
         Utils.playMusic(gamePane, Constants.getAudio2());
         Utils.addButler(gamePane);
         createChessBoard(gamePane);
-
-        gamePane.getChildren().add(playerName);
-        gamePane.getChildren().add(messageGroup);
-
+        playerName = Utils.addNameText(currentPlayer.getName(),gamePane);
         stage.setScene(new Scene(gamePane));
         stage.show();
 
@@ -295,20 +290,5 @@ public class GameInterface {
         return null;
     }
 
-    public void displayCurrentPlayerName(){
-        name = Utils.addNameText(game.getCurrentPlayer().getName(),playerName);
-    }
-
-    public void removeCurrentPlayerName(){
-        Utils.removeNameText(name, playerName);
-    }
-
-    public void displayButlerMessage(String message){
-        butlerMessage = Utils.addButlerMessage(messageGroup, message);
-    }
-
-    public void removeButlerMessage(){
-        Utils.removeButlerMessage(messageGroup,butlerMessage);
-    }
 
 }

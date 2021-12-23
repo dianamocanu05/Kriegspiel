@@ -2,8 +2,10 @@ package org.example.GameLogic;
 
 import javafx.application.Platform;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.example.GUI.GameInterface;
+import org.example.GUI.Utils;
 import org.example.GameLogic.Players.HumanPlayer;
 import org.example.GameLogic.Players.IntelligentPlayer;
 import org.example.GameLogic.Players.Player;
@@ -19,6 +21,7 @@ public class Game {
     private Referee referee;
     private List<Player> players;
     private Stage stage;
+    private Text name, butlerMessage;
 
 
     public Game(Stage stage) {
@@ -41,40 +44,33 @@ public class Game {
         GUI.setGame(this);
         GUI.initialize();
         initPlayers();
+
     }
 
 
     public void switchPlayer() {
         this.currentPlayer = players.get(1 - players.indexOf(currentPlayer));
-        try {
-            Thread.sleep(2 * 1000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
-        }
+    }
 
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public Player getHumanPlayer(){
-        for(Player player : players){
-            if(player instanceof HumanPlayer){
-                return player;
-            }
-        }
-        return null;
-    }
 
     public void update() throws InterruptedException {
+        while(name ==null) {
+            name = GUI.getPlayerName();
+        }
 
         Move move = currentPlayer.getLastMove();
         String message = referee.announce(currentPlayer, move);
-        GUI.displayButlerMessage(message);
-        GUI.removeCurrentPlayerName();
+        butlerMessage = Utils.addButlerMessage(GUI.getGamePane(), message);
+        Thread.sleep(1000);
+        Utils.removeNameText(name,GUI.getGamePane());
+        Utils.removeButlerMessage(GUI.getGamePane(),butlerMessage);
+
         switchPlayer();
-        GUI.displayCurrentPlayerName();
-        GUI.removeButlerMessage();
+        name = Utils.addNameText(currentPlayer.getName(),GUI.getGamePane());
 
     }
 

@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -19,27 +20,29 @@ import org.example.Constants;
 import java.io.File;
 
 public class Utils {
-    public static Text addNameText(String name, Group group) {
+    public static Text addNameText(String name, StackPane stackPane) {
         Text text = new Text();
         text.setText(name + "'S TURN");
         text.setStyle(Constants.getStringFont());
         text.setFill(Color.RED);
+
+        text.setTranslateX(0);
+        text.setTranslateY((float) -1 * Constants.getWidth() / 4);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                group.getChildren().add(text);
+                stackPane.getChildren().add(text);
             }
         });
-        group.setTranslateX(0);
-        group.setTranslateY((float) -1 * Constants.getWidth() / 4);
+
         return text;
     }
 
-    public static void removeNameText(Text text, Group group) {
+    public static void removeNameText(Text text, StackPane stackPane) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                group.getChildren().remove(text);
+                stackPane.getChildren().remove(text);
             }
         });
     }
@@ -78,32 +81,33 @@ public class Utils {
         });
     }
 
-    public static TextArea addButlerMessage(Group group, String announce) {
-        TextArea bubbleView = new TextArea();
+
+    public static Text addButlerMessage(StackPane stackPane, String announce) {
+        Text bubbleView = new Text();
         bubbleView.setText(announce);
         bubbleView.setStyle(Constants.getButlerStringFont());
-        bubbleView.setMaxSize(50,10);
-        //bubbleView.setTranslateX((float) -1 * Constants.getWidth() / 2 + 140);
-        //bubbleView.setTranslateY((float) Constants.getHeight() / 2 - 120);
-        bubbleView.setTranslateX((float)-1*Constants.getWidth());
-        bubbleView.setTranslateY((float) -1*Constants.getHeight());
+        bubbleView.setFill(Color.RED);
+        bubbleView.setTranslateX((float) -1 * Constants.getWidth() / 2 + 160);
+        bubbleView.setTranslateY((float) Constants.getHeight() / 2 - 100);
+        System.out.println(announce);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                group.getChildren().add(bubbleView);
+                stackPane.getChildren().add(bubbleView);
             }
         });
         return bubbleView;
     }
 
-    public static void removeButlerMessage(Group group, TextArea message) {
+    public static void removeButlerMessage(StackPane stackPane, Text message) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                group.getChildren().remove(message);
+                stackPane.getChildren().remove(message);
             }
         });
     }
+
 
 
 }
