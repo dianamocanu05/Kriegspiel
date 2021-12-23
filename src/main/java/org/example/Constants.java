@@ -12,9 +12,10 @@ public class Constants {
     //IMAGES
     private static final String backgroundImg = "file:media/background.jpg";
     private static final String aboutImg = "file:media/soldier.jpg";
-    private static final String speechBubbleImg = "file:media/speech.png";
     private static final String butlerImg = "file:media/butler.png";
     private static final String borodinoMap = "file:media/borodino-map.jpg";
+    private static final String booksImg = "file:media/books.png";
+    private static final String oldPaperImg = "file:media/oldpaper.jpg";
 
     //MUSIC
     private static final String audio1 = "media/audio1.mp3";
@@ -60,6 +61,9 @@ public class Constants {
     public static String getPiecePath(PieceType piece, String color){
         return "file:media/pieces/" + piece.toString() + "_" + color + ".png";
     }
-    public static String getSpeechBubbleImg(){ return speechBubbleImg;}
     public static String getButlerImg(){ return butlerImg;}
+    public static String getBooksImg(){ return booksImg;}
+    public static String getOldPaperImg(){ return oldPaperImg;}
+
+
 }

@@ -142,6 +142,7 @@ public class GameInterface {
         Utils.addImage(gamePane, Constants.getBorodinoMap());
         Utils.playMusic(gamePane, Constants.getAudio2());
         Utils.addButler(gamePane);
+        Utils.addHistory(gamePane);
         createChessBoard(gamePane);
         playerName = Utils.addNameText(currentPlayer.getName(),gamePane);
         stage.setScene(new Scene(gamePane));
