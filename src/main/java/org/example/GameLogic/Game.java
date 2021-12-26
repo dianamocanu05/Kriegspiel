@@ -11,6 +11,8 @@ import org.example.GameLogic.Players.IntelligentPlayer;
 import org.example.GameLogic.Players.Player;
 import org.example.GameLogic.Players.Referee;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +72,8 @@ public class Game {
 
         Move move = currentPlayer.getLastMove();
         String message = referee.announce(currentPlayer, move);
-        logger.addLog("Referee to " + currentPlayer.getName() + ": " + message);
+        logOutcome(message, move);
+
         Utils.updateHistory(GUI.getHistory(),logger);
         butlerMessage = Utils.addButlerMessage(GUI.getGamePane(), message);
         Thread.sleep(1000);
@@ -80,6 +83,21 @@ public class Game {
         switchPlayer();
         name = Utils.addNameText(currentPlayer.getName(),GUI.getGamePane());
 
+    }
+
+    private void logOutcome(String message, Move move){
+
+        String verb;
+        if(message.contains("YES")) {
+            verb = " moved ";
+        }else{
+            verb = " attempted to move ";
+        }
+
+        long time =  System.currentTimeMillis() - GUI.getStart();
+        NumberFormat formatter = new DecimalFormat("#0.00000");
+
+        logger.addLog((formatter.format((time) / 1000d) + " : " +  currentPlayer.getName() + verb + move.getPieceType().toString() + " to " + move.getTarget().print()));
     }
 
 

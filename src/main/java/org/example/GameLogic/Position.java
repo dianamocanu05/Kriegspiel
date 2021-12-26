@@ -30,7 +30,7 @@ public class Position {
         return ((Position) other).getLetter() == this.letter && ((Position) other).getNumber() == this.number;
     }
 
-    public void print(){
-        System.out.println(letter + "" + number);
+    public String print(){
+        return (letter + "" + number);
     }
 }

@@ -15,6 +15,7 @@ public class Constants {
     private static final String butlerImg = "file:media/butler.png";
     private static final String borodinoMap = "file:media/borodino-map.jpg";
     private static final String booksImg = "file:media/books.png";
+    private static final String penImg = "file:media/pen.png";
     private static final String oldPaperImg = "file:media/oldpaper.jpg";
 
     //MUSIC
@@ -65,6 +66,7 @@ public class Constants {
     }
     public static String getButlerImg(){ return butlerImg;}
     public static String getBooksImg(){ return booksImg;}
+    public static String getPenImg(){ return penImg;}
     public static String getOldPaperImg(){ return oldPaperImg;}
 
 

@@ -54,6 +54,7 @@ public class GameInterface {
     private Text playerName;
     public Move lastMove;
     private ScrollPane history;
+    private long start;
 
     public GameInterface(Stage stage) {
         this.stage = stage;
@@ -78,7 +79,7 @@ public class GameInterface {
 
     public void initScreen() {
         stackPane = new StackPane();
-        Utils.playMusic(stackPane, Constants.getAudio1());
+        //Utils.playMusic(stackPane, Constants.getAudio1());
         Utils.addImage(stackPane, Constants.getBackgroundImg());
         VBox vbox = new VBox();
         vbox.setSpacing(10);
@@ -149,15 +150,19 @@ public class GameInterface {
 
 
         Utils.addImage(gamePane, Constants.getBorodinoMap());
-        Utils.playMusic(gamePane, Constants.getAudio2());
+        //Utils.playMusic(gamePane, Constants.getAudio2());
         Utils.addButler(gamePane);
+        Utils.addPen(gamePane);
         history = Utils.addHistory(gamePane);
         createChessBoard(gamePane);
         playerName = Utils.addNameText(currentPlayer.getName(), gamePane);
         stage.setScene(new Scene(gamePane));
+        start = System.currentTimeMillis();
         stage.show();
 
     }
+
+    public long getStart(){return start;}
 
     public void setGame(Game game) {
         this.game = game;
@@ -226,7 +231,6 @@ public class GameInterface {
 
 
                 //Point2D coord = rectangle.localToParent(rectangle.getX(),rectangle.getY());
-                Utils.addTooltip(rectangle);
 
                 Position position = new Position((char) ('A' + j - 1), 9 - i);
                 PieceType piece = currentPlayer.getBoard().getPieceAtPosition(position);
