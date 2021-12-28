@@ -73,7 +73,7 @@ public class GameInterface {
         return playerName;
     }
 
-    public ScrollPane getHistory(){
+    public ScrollPane getHistory() {
         return history;
     }
 
@@ -162,7 +162,9 @@ public class GameInterface {
 
     }
 
-    public long getStart(){return start;}
+    public long getStart() {
+        return start;
+    }
 
     public void setGame(Game game) {
         this.game = game;
@@ -266,9 +268,23 @@ public class GameInterface {
                 chosen = true;
                 mutex.notify();
             }
-            movePiece(pieceType, imageView, pane, target);
+            if(isPositionEmpty(computePosition(target))) {
+                movePiece(pieceType, imageView, pane, target);
+                currentPlayer.getBoard().replace(lastMove);
+            }
 
         });
+    }
+
+    private boolean isPositionEmpty(Position position) {
+        return (currentPlayer.getBoard().getPieceAtPosition(position) == PieceType.NONE);
+    }
+
+    private Position computePosition(Rectangle rectangle) {
+        int i = GridPane.getRowIndex(rectangle);
+        int j = GridPane.getColumnIndex(rectangle);
+
+        return new Position((char) ('A' + j -1), 9 - i);
     }
 
     private Move getMove(PieceType pieceType, Rectangle target) {
