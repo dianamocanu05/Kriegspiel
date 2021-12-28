@@ -36,9 +36,11 @@ public class Game {
         for (Player player : players) {
             Thread thread = new Thread(player);
             player.setThread(thread);
+            player.setOpponent(players.get(1-players.indexOf(player)));
             thread.start();
         }
     }
+
 
     public void start() {
         logger = new Logger();
@@ -56,6 +58,10 @@ public class Game {
         this.currentPlayer = players.get(1 - players.indexOf(currentPlayer));
     }
 
+    public Player getOtherPlayer(){
+        return players.get(1 - players.indexOf(currentPlayer));
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -71,6 +77,7 @@ public class Game {
         }
 
         Move move = currentPlayer.getLastMove();
+
         String message = referee.announce(currentPlayer, move);
         logOutcome(message, move);
 

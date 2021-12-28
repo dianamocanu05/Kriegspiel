@@ -268,7 +268,10 @@ public class GameInterface {
                 chosen = true;
                 mutex.notify();
             }
-            if(isPositionEmpty(computePosition(target))) {
+
+            boolean legal = lastMove.isMoveLegal();
+            game.getReferee().setLastOk(legal);
+            if(isPositionEmpty(computePosition(target)) && legal) {
                 movePiece(pieceType, imageView, pane, target);
                 currentPlayer.getBoard().replace(lastMove);
             }
@@ -294,7 +297,7 @@ public class GameInterface {
         Position newPosition = new Position((char) ('A' + j - 1), 9 - i);
         Position oldPosition = new Position((char) ('A' + GridPane.getColumnIndex(initial) - 1), 9 - GridPane.getRowIndex(initial));
 
-        return new Move(oldPosition, newPosition, pieceType, currentPlayer.getBoard(), currentPlayer);
+        return new Move(oldPosition, newPosition, pieceType, currentPlayer.getBoard(),currentPlayer.getOpponent().getBoard(), currentPlayer);
     }
 
     public void movePiece(PieceType pieceType, ImageView piece, GridPane pane, Rectangle target) {

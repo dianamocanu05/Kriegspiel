@@ -8,7 +8,7 @@ import org.example.GameLogic.PiecePosition;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class Player implements Runnable{
+public abstract class Player implements Runnable {
 
     private String name;
     private String color;
@@ -16,16 +16,25 @@ public abstract class Player implements Runnable{
     protected Game game;
     private Thread thread;
     protected Move lastMove;
+    private Player opponent;
 
     public Player(String name, String color) {
         this.name = name;
         this.color = color;
     }
 
-    public Move getLastMove(){ return lastMove;}
+    public Move getLastMove() {
+        return lastMove;
+    }
 
+    public void setOpponent(Player opponent) {
+        this.opponent = opponent;
+    }
+
+    public Player getOpponent(){return  opponent;}
 
     public abstract Move attemptMove() throws InterruptedException;
+
     public void setBoard(Board board) {
         this.board = board;
     }
@@ -33,6 +42,10 @@ public abstract class Player implements Runnable{
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     public String getName() {
@@ -58,16 +71,15 @@ public abstract class Player implements Runnable{
         }
 
     }
+
     public void setThread(Thread thread) {
         this.thread = thread;
     }
 
 
-
-
     @Override
-    public void run(){
-        while (true){
+    public void run() {
+        while (true) {
             try {
                 waitTurn();
             } catch (InterruptedException e) {
@@ -81,9 +93,9 @@ public abstract class Player implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-                if(this instanceof HumanPlayer) {
-                    game.getGUI().chosen = false;
-                }
+            if (this instanceof HumanPlayer) {
+                game.getGUI().chosen = false;
+            }
 
             try {
                 game.update();

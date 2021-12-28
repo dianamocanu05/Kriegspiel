@@ -59,13 +59,13 @@ public class Board {
             }
         }
         this.configuration.add(new PiecePosition(new Position('A',1),PieceType.ROOK, "white"));
-        this.configuration.add(new PiecePosition(new Position('B',1),PieceType.BISHOP, "white"));
-        this.configuration.add(new PiecePosition(new Position('C',1), PieceType.KING, "white"));
-        this.configuration.add(new PiecePosition(new Position('D',1), PieceType.KNIGHT, "white"));
-        this.configuration.add(new PiecePosition(new Position('E',1), PieceType.BISHOP, "white"));
-        this.configuration.add(new PiecePosition(new Position('F',1),PieceType.KNIGHT, "white"));
-        this.configuration.add(new PiecePosition(new Position('G',1), PieceType.ROOK, "white"));
-        this.configuration.add(new PiecePosition(new Position('H',1), PieceType.QUEEN, "white"));
+        this.configuration.add(new PiecePosition(new Position('B',1),PieceType.KNIGHT, "white"));
+        this.configuration.add(new PiecePosition(new Position('C',1), PieceType.BISHOP, "white"));
+        this.configuration.add(new PiecePosition(new Position('D',1), PieceType.QUEEN, "white"));
+        this.configuration.add(new PiecePosition(new Position('E',1), PieceType.KING, "white"));
+        this.configuration.add(new PiecePosition(new Position('F',1),PieceType.BISHOP, "white"));
+        this.configuration.add(new PiecePosition(new Position('G',1), PieceType.KNIGHT, "white"));
+        this.configuration.add(new PiecePosition(new Position('H',1), PieceType.ROOK, "white"));
     }
 
     public void print(){
@@ -92,13 +92,13 @@ public class Board {
             }
         }
        configuration.add(new PiecePosition(new Position('A',1),PieceType.ROOK, "white"));
-       configuration.add(new PiecePosition(new Position('B',1),PieceType.BISHOP, "white"));
-       configuration.add(new PiecePosition(new Position('C',1), PieceType.KING, "white"));
-       configuration.add(new PiecePosition(new Position('D',1), PieceType.KNIGHT, "white"));
-       configuration.add(new PiecePosition(new Position('E',1), PieceType.BISHOP, "white"));
-       configuration.add(new PiecePosition(new Position('F',1),PieceType.KNIGHT, "white"));
-       configuration.add(new PiecePosition(new Position('G',1), PieceType.ROOK, "white"));
-       configuration.add(new PiecePosition(new Position('H',1), PieceType.QUEEN, "white"));
+       configuration.add(new PiecePosition(new Position('B',1),PieceType.KNIGHT, "white"));
+       configuration.add(new PiecePosition(new Position('C',1), PieceType.BISHOP, "white"));
+       configuration.add(new PiecePosition(new Position('D',1), PieceType.QUEEN, "white"));
+       configuration.add(new PiecePosition(new Position('E',1), PieceType.KING, "white"));
+       configuration.add(new PiecePosition(new Position('F',1),PieceType.BISHOP, "white"));
+       configuration.add(new PiecePosition(new Position('G',1), PieceType.KNIGHT, "white"));
+       configuration.add(new PiecePosition(new Position('H',1), PieceType.ROOK, "white"));
 
        return configuration;
     }
