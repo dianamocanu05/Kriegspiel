@@ -7,10 +7,15 @@ import java.util.*;
 
 public class Board {
     private List<PiecePosition> configuration;
-
-    public Board() {
+    private String position;
+    public Board(String position) {
         configuration = new ArrayList<>();
-        initialConfiguration();
+        this.position = position;
+        if(position.equals("DOWN")) {
+            initialConfiguration();
+        }else{
+            initialConfigurationUp();
+        }
     }
 
 
@@ -67,17 +72,32 @@ public class Board {
         this.configuration.add(new PiecePosition(new Position('G',1), PieceType.KNIGHT, "white"));
         this.configuration.add(new PiecePosition(new Position('H',1), PieceType.ROOK, "white"));
     }
+    public void initialConfigurationUp(){
+        for(int i=1;i<=8;i++){
+            char letter = (char)('A' + i -1);
+            Position position = new Position(letter,7);
+            this.configuration.add(new PiecePosition(position, PieceType.PAWN, "black"));
 
-    public void print(){
-        int count = 0;
-        for(int i=1;i<=8;i++) {
-            for (int j = 1; j <= 8; j++) {
-                if(getPieceAtPosition(new Position((char)('A' + i -1),j)) !=  PieceType.NONE){
-                    count++;
-                }
+            for(int j=1; j<=6; j++){
+                this.configuration.add(new PiecePosition(new Position(letter,j), PieceType.NONE, "black") );
             }
         }
-        System.out.println(count);
+        this.configuration.add(new PiecePosition(new Position('A',8),PieceType.ROOK, "black"));
+        this.configuration.add(new PiecePosition(new Position('B',8),PieceType.KNIGHT, "black"));
+        this.configuration.add(new PiecePosition(new Position('C',8), PieceType.BISHOP, "black"));
+        this.configuration.add(new PiecePosition(new Position('D',8), PieceType.QUEEN, "black"));
+        this.configuration.add(new PiecePosition(new Position('E',8), PieceType.KING, "black"));
+        this.configuration.add(new PiecePosition(new Position('F',8),PieceType.BISHOP, "black"));
+        this.configuration.add(new PiecePosition(new Position('G',8), PieceType.KNIGHT, "black"));
+        this.configuration.add(new PiecePosition(new Position('H',8), PieceType.ROOK, "black"));
+    }
+
+    public void print() {
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                System.out.println(getPieceAtPosition(new Position((char) ('A' + i - 1), j)));
+            }
+        }
     }
 
     public static List<PiecePosition> getInitialConfiguration(){

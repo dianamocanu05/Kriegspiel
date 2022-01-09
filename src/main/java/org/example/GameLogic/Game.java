@@ -36,7 +36,7 @@ public class Game {
         for (Player player : players) {
             Thread thread = new Thread(player);
             player.setThread(thread);
-            player.setOpponent(players.get(1-players.indexOf(player)));
+            player.setOpponent(players.get(1 - players.indexOf(player)));
             thread.start();
         }
     }
@@ -45,12 +45,21 @@ public class Game {
     public void start() {
         logger = new Logger();
         referee = new Referee();
-        currentPlayer = players.get(0);
         GUI = new GameInterface(this.stage);
         GUI.setGame(this);
         GUI.initialize();
-        initPlayers();
+    }
 
+    public void startGameMode(String gameMode){
+        if (gameMode.equals("AvA")){
+            System.out.println("here1");
+            InitPlayers.initAvA(this);
+        }else{
+            System.out.println("here2");
+            InitPlayers.initPvA(this);
+        }
+        currentPlayer = players.get(0);
+        initPlayers();
     }
 
 
@@ -58,7 +67,7 @@ public class Game {
         this.currentPlayer = players.get(1 - players.indexOf(currentPlayer));
     }
 
-    public Player getOtherPlayer(){
+    public Player getOtherPlayer() {
         return players.get(1 - players.indexOf(currentPlayer));
     }
 
@@ -66,45 +75,48 @@ public class Game {
         return currentPlayer;
     }
 
-    public boolean isEnded(){
+    public boolean isEnded() {
         return false;
     }
 
 
     public void update() throws InterruptedException {
-        while(name ==null) {
+        while (name == null) {
             name = GUI.getPlayerName();
         }
 
         Move move = currentPlayer.getLastMove();
 
         String message = referee.announce(currentPlayer, move);
+        if(message.contains("YES") && currentPlayer instanceof IntelligentPlayer){
+            GUI.movePiece(move,currentPlayer);
+        }
         logOutcome(message, move);
 
-        Utils.updateHistory(GUI.getHistory(),logger);
+        Utils.updateHistory(GUI.getHistory(), logger);
         butlerMessage = Utils.addButlerMessage(GUI.getGamePane(), message);
         Thread.sleep(1000);
-        Utils.removeNameText(name,GUI.getGamePane());
-        Utils.removeButlerMessage(GUI.getGamePane(),butlerMessage);
+        Utils.removeNameText(name, GUI.getGamePane());
+        Utils.removeButlerMessage(GUI.getGamePane(), butlerMessage);
 
         switchPlayer();
-        name = Utils.addNameText(currentPlayer.getName(),GUI.getGamePane());
+        name = Utils.addNameText(currentPlayer.getName(), GUI.getGamePane());
 
     }
 
-    private void logOutcome(String message, Move move){
+    private void logOutcome(String message, Move move) {
 
         String verb;
-        if(message.contains("YES")) {
+        if (message.contains("YES")) {
             verb = " moved ";
-        }else{
+        } else {
             verb = " attempted to move ";
         }
 
-        long time =  System.currentTimeMillis() - GUI.getStart();
+        long time = System.currentTimeMillis() - GUI.getStart();
         NumberFormat formatter = new DecimalFormat("#0.00000");
 
-        logger.addLog((formatter.format((time) / 1000d) + " : " +  currentPlayer.getName() + verb + move.getPieceType().toString() + " to " + move.getTarget().print()));
+        logger.addLog((formatter.format((time) / 1000d) + " : " + currentPlayer.getName() + verb + move.getPieceType().toString() + " to " + move.getTarget().print()));
     }
 
 
@@ -116,6 +128,8 @@ public class Game {
         return GUI;
     }
 
-    public Referee getReferee(){ return referee;}
+    public Referee getReferee() {
+        return referee;
+    }
 
 }

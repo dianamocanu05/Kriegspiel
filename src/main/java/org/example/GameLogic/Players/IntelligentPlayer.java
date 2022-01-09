@@ -15,8 +15,7 @@ public class IntelligentPlayer extends Player{
         }catch (InterruptedException e){
             e.printStackTrace();
         }
-        lastMove = new Move(new Position('A',1),new Position('B',2), PieceType.NONE, new Board(),getOpponent().getBoard(), this);
-
+        lastMove = new Move(new Position('A',2),new Position('A',3), PieceType.PAWN, new Board("AvA"),getOpponent().getBoard(), this);
         return lastMove;
     }
 

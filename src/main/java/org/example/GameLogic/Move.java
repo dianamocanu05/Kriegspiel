@@ -91,6 +91,7 @@ public class Move {
              * diagonally in a forward direction
              */
             case PAWN: {
+                System.out.println(this.getInitial().print());
                 if (Objects.equals(computeDirection(), "UP")) {
                     if (isNotChanged(initial)) {  //hasn't been moved
                         if(getDistance() <= 2){

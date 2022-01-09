@@ -20,18 +20,6 @@ public class App extends Application {
     public void start(Stage stage) {
 
         Game game = new Game(stage);
-
-        HumanPlayer humanPlayer = new HumanPlayer("Emperor Napoleon", "white");
-        humanPlayer.setBoard(new Board());
-        humanPlayer.setGame(game);
-
-        IntelligentPlayer intelligentPlayer = new IntelligentPlayer("Marshall Kutuzov", "black");
-        intelligentPlayer.setBoard(new Board());
-        intelligentPlayer.setGame(game);
-
-        game.addPlayer(humanPlayer);
-        game.addPlayer(intelligentPlayer);
-
         game.start();
 
     }
