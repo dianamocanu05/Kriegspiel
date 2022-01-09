@@ -12,6 +12,7 @@ public class Constants {
     //IMAGES
     private static final String backgroundImg = "file:media/background.jpg";
     private static final String aboutImg = "file:media/soldier.jpg";
+    private static final String helpImg = "file:media/help.jpg";
     private static final String butlerImg = "file:media/butler.png";
     private static final String borodinoMap = "file:media/borodino-map.jpg";
     private static final String booksImg = "file:media/books.png";
@@ -42,6 +43,9 @@ public class Constants {
     }
     public static String getAboutImg() {
         return aboutImg;
+    }
+    public static String getHelpImg() {
+        return helpImg;
     }
     public static String getAudio1() {
         return audio1;

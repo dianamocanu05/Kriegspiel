@@ -188,8 +188,18 @@ public class GameInterface {
         this.game = game;
     }
 
-    public static void helpInterface(Stage stage) {
-
+    public void helpInterface(Stage stage) {
+        stage.close();
+        StackPane stackPane = new StackPane();
+        Utils.addImage(stackPane, Constants.getHelpImg());
+        Utils.playMusic(stackPane, Constants.getAudio1());
+        Button back = addButton(stackPane, "Back", stage, 100, 5, Constants.getLittleFont());
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.BOTTOM_RIGHT);
+        hBox.getChildren().add(back);
+        stackPane.getChildren().add(hBox);
+        stage.setScene(new Scene(stackPane));
+        stage.show();
     }
 
     public void aboutInterface(Stage stage) {
