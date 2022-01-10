@@ -8,11 +8,28 @@ import java.util.Objects;
 
 public class Utils {
     public static State makeAction(State state, Move action) {
-        //System.out.println("Moved " + action.getPieceType().toString() + " from " + action.getInitial().print() + " to " + action.getTarget().print());
+        System.out.println("Moved " + action.getPieceType().toString() + " from " + action.getInitial().print() + " to " + action.getTarget().print());
         Board board = state.getBoard();
-        List<PiecePosition> piecePositions = board.createNewBoard(action);
-        board.setConfiguration(piecePositions);
-        return new State(board, action);
+        return new State(createNewBoard(board,action), action);
+    }
+
+    private static Board createNewBoard(Board oldBoard, Move move){
+        Board newBoard = new Board(oldBoard.getPosition());
+        List<PiecePosition> newConfiguration = new ArrayList<>();
+        List<PiecePosition> oldConfiguration = oldBoard.getConfiguration();
+        for(PiecePosition piecePosition : oldConfiguration){
+            PiecePosition newPiecePostion = new PiecePosition(piecePosition);
+            if(newPiecePostion.getPosition().equals(move.getInitial())){
+                newPiecePostion.setPieceType(PieceType.NONE);
+            }
+            if(newPiecePostion.getPosition().equals(move.getTarget())){
+                newPiecePostion.setPieceType(move.getPieceType());
+            }
+            newConfiguration.add(newPiecePostion);
+
+        }
+        newBoard.setConfiguration(newConfiguration);
+        return newBoard;
     }
 
     public static List<Move> availableMoves(State state) {

@@ -18,8 +18,11 @@ public class IntelligentPlayer extends Player{
         }catch (InterruptedException e){
             e.printStackTrace();
         }
+
         MCTS mcts = new MCTS(new Node(new State(this.board, null),null));
         State state = mcts.run();
+
+
         lastMove = state.getCreatorMove();
         return lastMove;
     }

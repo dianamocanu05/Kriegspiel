@@ -52,10 +52,8 @@ public class Game {
 
     public void startGameMode(String gameMode){
         if (gameMode.equals("AvA")){
-            System.out.println("here1");
             InitPlayers.initAvA(this);
         }else{
-            System.out.println("here2");
             InitPlayers.initPvA(this);
         }
         currentPlayer = players.get(0);

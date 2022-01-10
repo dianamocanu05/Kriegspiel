@@ -34,7 +34,9 @@ public class MCTS {
         }else{
             List<Move> possibleActions = currentNode.getState().getAvailableActions();
             for(Move action : possibleActions){
+
                 State newState = Utils.makeAction(currentNode.getState(), action);
+
                 Node newNode = new Node(newState, currentNode);
                 currentNode.addChild(newNode);
             }
@@ -50,6 +52,7 @@ public class MCTS {
         }
 
         Move action = MCTS.getRandomAction(state.getAvailableActions());
+
         return simulate(state, action);
     }
 

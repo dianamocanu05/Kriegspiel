@@ -18,6 +18,10 @@ public class Board {
         }
     }
 
+    public String getPosition(){
+        return position;
+    }
+
 
     public void replace(Move move){
         List<PiecePosition> newBoard = new ArrayList<>();
@@ -34,21 +38,7 @@ public class Board {
         //return newBoard;
     }
 
-    public List<PiecePosition> createNewBoard(Move move){
-        List<PiecePosition> newBoard = new ArrayList<>();
-        for(PiecePosition piecePosition : this.configuration){
-            PiecePosition newPiecePostion = piecePosition;
-            if(piecePosition.getPosition().equals(move.getInitial())){
-                newPiecePostion.setPieceType(PieceType.NONE);
-            }
-            if(piecePosition.getPosition().equals(move.getTarget())){
-                newPiecePostion.setPieceType(move.getPieceType());
-            }
-            newBoard.add(newPiecePostion);
 
-        }
-        return newBoard;
-    }
 
     public void setConfiguration(List<PiecePosition> newBoard){
         this.configuration = newBoard;
