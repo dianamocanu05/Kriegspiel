@@ -77,6 +77,11 @@ public class Game {
         return false;
     }
 
+    public Player getOtherPlayer(Player currentPlayer){
+        int index = players.indexOf(currentPlayer);
+        return players.get(1-index);
+    }
+
 
     public void update() throws InterruptedException {
         while (name == null) {

@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.example.Constants;
 import org.example.GameLogic.*;
+import org.example.GameLogic.Players.IntelligentPlayer;
 import org.example.GameLogic.Players.Player;
 import org.example.GameLogic.Util;
 
@@ -37,7 +38,7 @@ public class GameInterface {
     private Text playerName;
     public Move lastMove;
     private ScrollPane history;
-    private GridPane pane;
+    private GridPane hPane = new GridPane(), pane;
     private long start;
     private String gameMode = "PvA";
     private HashMap<PiecePosition, ImageView> images1 = new HashMap<>();
@@ -218,7 +219,6 @@ public class GameInterface {
 
 
     public void createChessBoard(StackPane stackPane) {
-        GridPane pane = new GridPane();
 
         int count = 0;
         int size = 70;
@@ -256,7 +256,7 @@ public class GameInterface {
                 rectangle.setOpacity(0.5);
 
                 chessBoard.add(rectangle);
-                pane.add(rectangle, j, i);
+                hPane.add(rectangle, j, i);
                 count++;
 
 
@@ -267,16 +267,16 @@ public class GameInterface {
 
                 if (piece != PieceType.NONE) {
                     ImageView pieceImage = new ImageView(Constants.getPiecePath(piece, currentPlayer.getColor()));
-                    addPieceMouseListener(pieceImage, piece, pane);
-                    pane.add(pieceImage, j, i);
+                    addPieceMouseListener(pieceImage, piece, hPane);
+                    hPane.add(pieceImage, j, i);
                 }
             }
         }
 
-        pane.setGridLinesVisible(true);
-        pane.setAlignment(Pos.CENTER);
+        hPane.setGridLinesVisible(true);
+        hPane.setAlignment(Pos.CENTER);
         stackPane.getChildren().add(lettersNumbers);
-        stackPane.getChildren().add(pane);
+        stackPane.getChildren().add(hPane);
     }
 
 
@@ -319,7 +319,7 @@ public class GameInterface {
                 rectangle.setOpacity(0.5);
 
                 chessBoard.add(rectangle);
-                pane.add(rectangle, j, i);
+                hPane.add(rectangle, j, i);
                 count++;
 
 
@@ -332,21 +332,21 @@ public class GameInterface {
                     ImageView pieceImage = new ImageView(Constants.getPiecePath(piece, currentPlayer.getColor()));
                     images1.put(new PiecePosition(position, piece, currentPlayer.getColor()), pieceImage);
                     rectangles1.put(pieceImage, rectangle);
-                    pane.add(pieceImage, j, i);
+                    hPane.add(pieceImage, j, i);
                 }
                 if (opponentPiece != PieceType.NONE) {
                     ImageView pieceImage = new ImageView(Constants.getPiecePath(opponentPiece, otherPlayer.getColor()));
                     images2.put(new PiecePosition(position, opponentPiece, otherPlayer.getColor()), pieceImage);
                     rectangles2.put(pieceImage, rectangle);
-                    pane.add(pieceImage, j, i);
+                    hPane.add(pieceImage, j, i);
                 }
             }
         }
 
-        pane.setGridLinesVisible(true);
-        pane.setAlignment(Pos.CENTER);
+        hPane.setGridLinesVisible(true);
+        hPane.setAlignment(Pos.CENTER);
         stackPane.getChildren().add(lettersNumbers);
-        stackPane.getChildren().add(pane);
+        stackPane.getChildren().add(hPane);
     }
 
 
@@ -406,30 +406,38 @@ public class GameInterface {
         pane.add(piece, j, i);
     }
 
+
     public void movePiece(Move move, Player player) {
-        ImageView piece;
-        PiecePosition piecePosition;
-        int i = 9 - move.getTarget().getNumber();
-        int j = move.getTarget().getLetter() - 'A' + 1;
-        if (player.getColor().equals("white")) {
-            piecePosition = new PiecePosition(move.getInitial(), move.getPieceType(), player.getColor());
-            piece = Util.getImageView(images1, piecePosition);
-        } else {
-            piecePosition = new PiecePosition(move.getInitial(), move.getPieceType(), player.getColor());
-            piece = Util.getImageView(images2, piecePosition);
-        }
-        Board board = player.getBoard();
-        board.replace(move);
-        player.setBoard(board);
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                pane.getChildren().remove(piece);
-                pane.add(piece, j, i);
+        if (player instanceof IntelligentPlayer && game.getOtherPlayer(player) instanceof IntelligentPlayer) {
+            ImageView piece;
+            PiecePosition piecePosition;
+            int i = 9 - move.getTarget().getNumber();
+            int j = move.getTarget().getLetter() - 'A' + 1;
+            if (player.getColor().equals("white")) {
+                piecePosition = new PiecePosition(move.getInitial(), move.getPieceType(), player.getColor());
+                piece = Util.getImageView(images1, piecePosition);
+            } else {
+                piecePosition = new PiecePosition(move.getInitial(), move.getPieceType(), player.getColor());
+                piece = Util.getImageView(images2, piecePosition);
             }
-        });
+            Board board = player.getBoard();
+            board.replace(move);
+            player.setBoard(board);
 
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("here");
+                    hPane.getChildren().remove(piece);
+                    hPane.add(piece, j, i);
+                }
+            });
+        
+        } else {
+            Board board = player.getBoard();
+            board.replace(move);
+            player.setBoard(board);
+        }
 
 
     }

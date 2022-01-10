@@ -20,6 +20,7 @@ public class HumanPlayer extends Player {
             }
         }
         lastMove = game.getGUI().lastMove;
+        lastMove.print();
         return lastMove;
     }
 
