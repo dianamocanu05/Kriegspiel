@@ -25,6 +25,13 @@ public class Move {
 
     }
 
+    public Move(Position initial, Position target, PieceType pieceType, Board thisBoard) {
+        this.initial = initial;
+        this.target = target;
+        this.pieceType = pieceType;
+        this.thisBoard = thisBoard;
+    }
+
 
     public PieceType getPieceType() {
         return pieceType;
@@ -40,6 +47,9 @@ public class Move {
 
 
     public boolean isMoveLegal() {
+        if(this.thisBoard.getPieceAtPosition(this.getTarget()) != PieceType.NONE){
+            return false;
+        }
         switch (pieceType) {
             /*
              * Kings move one square in any direction, so long as that square
@@ -56,7 +66,7 @@ public class Move {
              * any number of squares. They are unable to jump over pieces.
              */
             case QUEEN: {
-                return !isJump();
+                return !isJump(thisBoard) && (diagonalDirections.contains(computeDirection()) || (horizVerticalDirections.contains(computeDirection())));
             }
 
             /*
@@ -64,7 +74,7 @@ public class Move {
              * They are unable to jump over pieces. Rooks move when the king castles.
              */
             case ROOK: {
-                return (horizVerticalDirections.contains(computeDirection()) && !isJump());
+                return (horizVerticalDirections.contains(computeDirection()) && !isJump(thisBoard));
             }
 
             /*
@@ -72,7 +82,7 @@ public class Move {
              *  They are unable to jump over pieces.
              */
             case BISHOP: {
-                return (diagonalDirections.contains(computeDirection()) && !isJump());
+                return (diagonalDirections.contains(computeDirection()) && !isJump(thisBoard));
             }
 
             /*
@@ -91,7 +101,6 @@ public class Move {
              * diagonally in a forward direction
              */
             case PAWN: {
-                System.out.println(this.getInitial().print());
                 if (Objects.equals(computeDirection(), "UP")) {
                     if (isNotChanged(initial)) {  //hasn't been moved
                         if(getDistance() <= 2){
@@ -163,12 +172,18 @@ public class Move {
         return null;
     }
 
-    private boolean isJump(){
-        return isJumpOverPiece(player.getBoard()) || isJumpOverPiece(enemyBoard);
-    }
+    /*private boolean isJump(){
+        return isJumpOverPiece(player.getBoard());
+    }*/
 
+    private boolean isJump(Board board){
+        return isJumpOverPiece(board);
+    }
     private boolean isJumpOverPiece(Board board) {
         String direction = computeDirection();
+        if (direction == null){
+            return false;
+        }
         switch (direction) {
             case "UP": {
                 int initialNumber = initial.getNumber();
@@ -216,6 +231,10 @@ public class Move {
                     }
                 }
                 return false;
+            }
+
+            default: {
+                break;
             }
 
         }
