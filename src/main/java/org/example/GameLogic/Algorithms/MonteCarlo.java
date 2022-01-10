@@ -2,6 +2,15 @@ package org.example.GameLogic.Algorithms;
 
 import java.util.*;
 
+/**
+ * https://www.ics.uci.edu/~dechter/courses/ics-295/fall-2019/papers/2010-mtc-aij.pdf
+ * • Selection. The algorithm selects a leaf node from the tree based on the number of visits and their average value.
+ * • Expansion. The algorithm optionally adds new nodes to the tree.
+ * • Simulation. The algorithm somehow simulates the rest of the game one or more times, and returns the value of the
+ *               final state (or their average, if simulated multiple times).
+ * • Backpropagation. The value is propagated to the node’s ancestors up to the root, and new average values are computed
+ *               for these nodes.
+ */
 public class MonteCarlo {
     private Node rootNode;
 
@@ -9,6 +18,8 @@ public class MonteCarlo {
         this.rootNode = rootNode;
     }
 
+
+    //1. Selection
     public Node makeChoice() {
         List<Node> bestChildren = new ArrayList<>();
         int mostVisits = -1000;
@@ -52,6 +63,7 @@ public class MonteCarlo {
         return null;
     }
 
+    //3. Simulation
     public void simulate(int expansionCount) {
         for (int i = 0; i < expansionCount; i++) {
             Node currentNode = this.rootNode;
@@ -62,6 +74,7 @@ public class MonteCarlo {
         }
     }
 
+    //2. Expansion
     public void expand(Node node) {
         MonteCarlo.childFinder(node, this);
         List<Node> children = node.getChildren();
@@ -81,6 +94,7 @@ public class MonteCarlo {
 
     }
 
+    //4. Backpropagation
     public void randomRollout(Node node) {
         MonteCarlo.childFinder(node, this);
         Node child = Node.getRandomChoice(node.getChildren());
