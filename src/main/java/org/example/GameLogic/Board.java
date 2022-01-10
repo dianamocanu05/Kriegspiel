@@ -19,7 +19,7 @@ public class Board {
     }
 
 
-    public List<PiecePosition> replace(Move move){
+    public void replace(Move move){
         List<PiecePosition> newBoard = new ArrayList<>();
         for(PiecePosition piecePosition : this.configuration){
             if(piecePosition.getPosition().equals(move.getInitial())){
@@ -29,6 +29,22 @@ public class Board {
                 piecePosition.setPieceType(move.getPieceType());
             }
             newBoard.add(piecePosition);
+
+        }
+        //return newBoard;
+    }
+
+    public List<PiecePosition> createNewBoard(Move move){
+        List<PiecePosition> newBoard = new ArrayList<>();
+        for(PiecePosition piecePosition : this.configuration){
+            PiecePosition newPiecePostion = piecePosition;
+            if(piecePosition.getPosition().equals(move.getInitial())){
+                newPiecePostion.setPieceType(PieceType.NONE);
+            }
+            if(piecePosition.getPosition().equals(move.getTarget())){
+                newPiecePostion.setPieceType(move.getPieceType());
+            }
+            newBoard.add(newPiecePostion);
 
         }
         return newBoard;

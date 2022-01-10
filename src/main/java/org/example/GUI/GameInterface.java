@@ -418,8 +418,9 @@ public class GameInterface {
             piecePosition = new PiecePosition(move.getInitial(), move.getPieceType(), player.getColor());
             piece = Util.getImageView(images2, piecePosition);
         }
-        player.getBoard().replace(move);
-
+        Board board = player.getBoard();
+        board.replace(move);
+        player.setBoard(board);
 
         Platform.runLater(new Runnable() {
             @Override

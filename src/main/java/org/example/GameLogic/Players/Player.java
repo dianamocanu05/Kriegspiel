@@ -12,7 +12,7 @@ public abstract class Player implements Runnable {
 
     private String name;
     private String color;
-    private Board board;
+    protected Board board;
     protected Game game;
     private Thread thread;
     protected Move lastMove;

@@ -8,10 +8,11 @@ import java.util.Objects;
 
 public class Utils {
     public static State makeAction(State state, Move action) {
-        System.out.println("Moved " + action.getPieceType().toString() + " from " + action.getInitial().print() + " to " + action.getTarget().print());
+        //System.out.println("Moved " + action.getPieceType().toString() + " from " + action.getInitial().print() + " to " + action.getTarget().print());
         Board board = state.getBoard();
-        board.replace(action);
-        return new State(board);
+        List<PiecePosition> piecePositions = board.createNewBoard(action);
+        board.setConfiguration(piecePositions);
+        return new State(board, action);
     }
 
     public static List<Move> availableMoves(State state) {

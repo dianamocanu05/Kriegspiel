@@ -11,14 +11,20 @@ public class State {
     private Board board;
     private List<Move> availableMoves;
     private int value;
+    private Move creatorMove;
 
-    public State(Board board) {
+    public State(Board board, Move creatorMove) {
         this.board = board;
+        this.creatorMove = creatorMove;
         this.availableMoves = new ArrayList<>();
     }
 
     public boolean isTerminal(int k) {
         return k == 1;
+    }
+
+    public Move getCreatorMove(){
+        return creatorMove;
     }
 
     public List<Move> getAvailableActions() {

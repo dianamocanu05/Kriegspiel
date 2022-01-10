@@ -86,7 +86,6 @@ public class Game {
         }
 
         Move move = currentPlayer.getLastMove();
-
         String message = referee.announce(currentPlayer, move);
         if(message.contains("YES") && currentPlayer instanceof IntelligentPlayer){
             GUI.movePiece(move,currentPlayer);

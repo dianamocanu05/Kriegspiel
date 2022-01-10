@@ -16,7 +16,7 @@ public class Referee {
                 return "YES, SIR";
             }
         }else{
-            if(attemptedMove.isMoveLegal()){
+            if(attemptedMove.refisMoveLegal()){
                 return "YES, SIR";
             }
         }

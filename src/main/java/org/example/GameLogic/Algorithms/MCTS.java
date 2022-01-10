@@ -13,6 +13,7 @@ public class MCTS {
 
     private Node root;
     private int k=0;
+    private Move lastMove = null;
     public MCTS(Node root){
         this.root = root;
     }
@@ -53,6 +54,7 @@ public class MCTS {
     }
 
     public State simulate(State state, Move action){
+        lastMove = action;
         return Utils.makeAction(state, action);
     }
 
@@ -72,6 +74,10 @@ public class MCTS {
         return bestChild;
     }
 
+    public Move getLastMove(){
+        return lastMove;
+    }
+
     private static double ucb1(Node node){
         double log = Math.log(node.getParent().getnSampled())/Math.log(Math.E);
         return node.getWinningScore() + 2 * (Math.sqrt(log/node.getnSampled()));
@@ -81,4 +87,6 @@ public class MCTS {
         int len = actions.size();
         return actions.get(ThreadLocalRandom.current().nextInt(0, len));
     }
+
+
 }

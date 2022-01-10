@@ -44,10 +44,9 @@ public class Move {
     public Position getTarget() {
         return target;
     }
-
-
-    public boolean isMoveLegal() {
-        if(this.thisBoard.getPieceAtPosition(this.getTarget()) != PieceType.NONE){
+    public boolean refisMoveLegal() {
+        if(thisBoard.getPieceAtPosition(this.getTarget()) != PieceType.NONE){
+            System.out.println(thisBoard.getPieceAtPosition(this.getTarget()).toString());
             return false;
         }
         switch (pieceType) {
@@ -116,6 +115,78 @@ public class Move {
         return false;
     }
 
+    public boolean isMoveLegal() {
+        if(this.thisBoard.getPieceAtPosition(this.getTarget()) != PieceType.NONE){
+            return false;
+        }
+        switch (pieceType) {
+            /*
+             * Kings move one square in any direction, so long as that square
+             * is not attacked by an enemy piece. Additionally, kings are able
+             * to make a special move, known as castling.
+             */
+            case KING: {
+                //+castling
+                return (getDistance() == 1);
+            }
+
+            /*
+             * Queens move diagonally, horizontally, or vertically
+             * any number of squares. They are unable to jump over pieces.
+             */
+            case QUEEN: {
+                return !isJump(thisBoard) && (diagonalDirections.contains(computeDirection()) || (horizVerticalDirections.contains(computeDirection())));
+            }
+
+            /*
+             * Rooks move horizontally or vertically any number of squares.
+             * They are unable to jump over pieces. Rooks move when the king castles.
+             */
+            case ROOK: {
+                return (horizVerticalDirections.contains(computeDirection()) && !isJump(thisBoard));
+            }
+
+            /*
+             * Bishops move diagonally any number of squares.
+             *  They are unable to jump over pieces.
+             */
+            case BISHOP: {
+                return (diagonalDirections.contains(computeDirection()) && !isJump(thisBoard));
+            }
+
+            /*
+             * Knights move in an ‘L’ shape’: two squares in a horizontal or vertical direction,
+             * then move one square horizontally or vertically.
+             * They are the only piece able to jump over other pieces.
+             */
+            case KNIGHT: {
+                return isLMove();
+            }
+
+            /*
+             * Pawns move vertically forward one square, with the option to move two squares
+             * if they have not yet moved. Pawns are the only piece to capture
+             * different to how they move. The pawns capture one square
+             * diagonally in a forward direction
+             */
+            case PAWN: {
+
+                if (Objects.equals(computeDirection(), "UP")) {
+                    if (isNotChanged(initial)) {  //hasn't been moved
+
+                        if(getDistance() <= 2){
+                            return true;
+                        }
+                    }
+                    else{
+                        return getDistance() == 1 || isPawnCapture(initial,target);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Work in progress
      */
@@ -137,7 +208,7 @@ public class Move {
         return -1;
     }
 
-    private String computeDirection() {
+    public String computeDirection() {
         if (initial.getNumber() == target.getNumber()) { //HORIZONTALLY
             if (initial.getLetter() - 'A' < target.getLetter() - 'A') {
                 return "RIGHT";
@@ -179,6 +250,12 @@ public class Move {
     private boolean isJump(Board board){
         return isJumpOverPiece(board);
     }
+
+    private boolean isJumpOverEnemyPiece(Board board){
+        return isJumpOverPiece(board);
+    }
+
+
     private boolean isJumpOverPiece(Board board) {
         String direction = computeDirection();
         if (direction == null){
@@ -318,5 +395,9 @@ public class Move {
         Position enemyPosition2 = new Position((char) (letter+1), number+2);
 
         return target.equals(enemyPosition1) || target.equals(enemyPosition2);
+    }
+
+    public void print(){
+        System.out.println(getInitial().print() + " " + getTarget().print() + " " + pieceType.toString());
     }
 }

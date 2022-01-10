@@ -1,6 +1,9 @@
 package org.example.GameLogic.Players;
 
 import org.example.GameLogic.*;
+import org.example.GameLogic.Algorithms.MCTS;
+import org.example.GameLogic.Algorithms.Node;
+import org.example.GameLogic.Algorithms.State;
 
 public class IntelligentPlayer extends Player{
 
@@ -11,11 +14,13 @@ public class IntelligentPlayer extends Player{
     @Override
     public Move attemptMove() throws InterruptedException {
         try{
-            Thread.sleep(2*1000);
+            Thread.sleep(4*1000);
         }catch (InterruptedException e){
             e.printStackTrace();
         }
-        lastMove = new Move(new Position('A',2),new Position('A',3), PieceType.PAWN, new Board("AvA"),getOpponent().getBoard(), this);
+        MCTS mcts = new MCTS(new Node(new State(this.board, null),null));
+        State state = mcts.run();
+        lastMove = state.getCreatorMove();
         return lastMove;
     }
 
