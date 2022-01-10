@@ -340,6 +340,13 @@ public class GameInterface {
                     rectangles2.put(pieceImage, rectangle);
                     hPane.add(pieceImage, j, i);
                 }
+                if(piece == PieceType.NONE){
+                    images1.put(new PiecePosition(position, piece, currentPlayer.getColor()), null);
+                }
+                if(opponentPiece == PieceType.NONE){
+                    images2.put(new PiecePosition(position, opponentPiece, otherPlayer.getColor()), null);
+
+                }
             }
         }
 
@@ -416,9 +423,13 @@ public class GameInterface {
             if (player.getColor().equals("white")) {
                 piecePosition = new PiecePosition(move.getInitial(), move.getPieceType(), player.getColor());
                 piece = Util.getImageView(images1, piecePosition);
+                images1.put(piecePosition,null);
+                images1.put(new PiecePosition(move.getTarget(),move.getPieceType(),player.getColor()),piece);
             } else {
                 piecePosition = new PiecePosition(move.getInitial(), move.getPieceType(), player.getColor());
                 piece = Util.getImageView(images2, piecePosition);
+                images2.put(piecePosition,null);
+                images2.put(new PiecePosition(move.getTarget(),move.getPieceType(),player.getColor()),piece);
             }
             Board board = player.getBoard();
             board.replace(move);
@@ -432,7 +443,7 @@ public class GameInterface {
                     hPane.add(piece, j, i);
                 }
             });
-        
+
         } else {
             Board board = player.getBoard();
             board.replace(move);

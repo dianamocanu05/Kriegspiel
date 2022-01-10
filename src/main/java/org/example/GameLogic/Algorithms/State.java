@@ -18,9 +18,9 @@ public class State {
         this.creatorMove = creatorMove;
         this.availableMoves = new ArrayList<>();
     }
-
+    //?????
     public boolean isTerminal(int k) {
-        return k == 1;
+        return k == 5;
     }
 
     public Move getCreatorMove(){

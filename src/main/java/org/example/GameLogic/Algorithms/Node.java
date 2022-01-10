@@ -7,7 +7,7 @@ public class Node {
     private State state;
     private List<Node> children;
     private int nSampled;
-    private int winningScore;
+    private int winningScore;//????
     private Node parent = null;
     public Node(State state, Node parent){
         this.state =state;
