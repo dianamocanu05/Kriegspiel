@@ -44,7 +44,7 @@ public class Game {
 
     public void start() {
         logger = new Logger();
-        referee = new Referee();
+        referee = new Referee(this);
         GUI = new GameInterface(this.stage);
         GUI.setGame(this);
         GUI.initialize();
@@ -89,8 +89,12 @@ public class Game {
         }
 
         Move move = currentPlayer.getLastMove();
+        move.print();
         String message = referee.announce(currentPlayer, move);
         if(message.contains("YES") && currentPlayer instanceof IntelligentPlayer){
+            GUI.movePiece(move,currentPlayer);
+        }else if(message.contains("CAPTURE")){
+            GUI.removePiece(move.getTarget(),getOtherPlayer(currentPlayer),move);
             GUI.movePiece(move,currentPlayer);
         }
         logOutcome(message, move);

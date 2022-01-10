@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Utils {
     public static State makeAction(State state, Move action) {
-        System.out.println("Moved " + action.getPieceType().toString() + " from " + action.getInitial().print() + " to " + action.getTarget().print());
+        //System.out.println("Moved " + action.getPieceType().toString() + " from " + action.getInitial().print() + " to " + action.getTarget().print());
         Board board = state.getBoard();
         return new State(createNewBoard(board,action), action);
     }

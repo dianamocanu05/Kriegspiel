@@ -24,6 +24,7 @@ public class MCTS {
 
     public State treeTraversal(){
         Node currentNode = root;
+        currentNode.incrementNSample();
         State state = null;
         while(!currentNode.isLeafNode()){
             currentNode = getBestChild(currentNode);
@@ -41,6 +42,7 @@ public class MCTS {
                 currentNode.addChild(newNode);
             }
             currentNode = currentNode.getChildren().get(0);
+            currentNode.incrementNSample();
             state = rollout(currentNode.getState());
         }
         return state;

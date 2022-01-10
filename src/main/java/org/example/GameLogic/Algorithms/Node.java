@@ -16,12 +16,15 @@ public class Node {
         this.winningScore = 0;
         this.parent = parent;
     }
+    public void incrementNSample(){
+        this.nSampled++;
+    }
 
     public void addChild(Node child){
         this.children.add(child);
     }
     public boolean isLeafNode(){
-        return this.children.size() ==0;
+        return this.children.size()==0;
     }
 
     public List<Node> getChildren(){

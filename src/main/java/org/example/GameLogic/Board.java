@@ -23,8 +23,9 @@ public class Board {
     }
 
 
-    public void replace(Move move){
-        List<PiecePosition> newBoard = new ArrayList<>();
+    public Board replace(Move move){
+        Board newBoard = new Board(position);
+        List<PiecePosition> newConf = new ArrayList<>();
         for(PiecePosition piecePosition : this.configuration){
             if(piecePosition.getPosition().equals(move.getInitial())){
                 piecePosition.setPieceType(PieceType.NONE);
@@ -32,10 +33,25 @@ public class Board {
             if(piecePosition.getPosition().equals(move.getTarget())){
                 piecePosition.setPieceType(move.getPieceType());
             }
-            newBoard.add(piecePosition);
+            newConf.add(piecePosition);
 
         }
-        //return newBoard;
+        newBoard.setConfiguration(newConf);
+        return newBoard;
+    }
+
+    public Board delete(PiecePosition piecePosition){
+        List<PiecePosition> newConfiguration = new ArrayList<>();
+        Position position = piecePosition.getPosition();
+        for(PiecePosition pos : this.configuration){
+            if(piecePosition.equals(pos)){
+               pos = new PiecePosition(position, PieceType.NONE, piecePosition.getColor());
+            }
+            newConfiguration.add(pos);
+        }
+        Board newBoard = new Board(this.position);
+        newBoard.setConfiguration(newConfiguration);
+        return newBoard;
     }
 
 

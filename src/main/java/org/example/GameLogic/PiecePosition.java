@@ -11,6 +11,11 @@ public class PiecePosition {
         this.color = color;
     }
 
+    public PiecePosition(Position position, PieceType pieceType){
+        this.pieceType = pieceType;
+        this.position = position;
+    }
+
     public PiecePosition(PiecePosition piecePosition){
         this.position = piecePosition.getPosition();
         this.pieceType = piecePosition.getPieceType();

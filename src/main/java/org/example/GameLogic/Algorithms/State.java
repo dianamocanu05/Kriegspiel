@@ -23,6 +23,8 @@ public class State {
         return k == 5;
     }
 
+
+
     public Move getCreatorMove(){
         return creatorMove;
     }

@@ -1,11 +1,13 @@
 package org.example.GameLogic.Players;
 
-import org.example.GameLogic.Board;
-import org.example.GameLogic.Game;
-import org.example.GameLogic.Move;
-import org.example.GameLogic.PiecePosition;
+import javafx.geometry.Pos;
+import javafx.scene.image.ImageView;
+import org.example.GameLogic.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class Player implements Runnable {
@@ -17,11 +19,44 @@ public abstract class Player implements Runnable {
     private Thread thread;
     protected Move lastMove;
     private Player opponent;
+    private List<Image> images= new ArrayList<>();
 
     public Player(String name, String color) {
         this.name = name;
         this.color = color;
     }
+
+    public void addImage(Position piecePosition, ImageView imageView){
+        this.images.add(new Image(piecePosition,imageView));
+    }
+
+    public void replaceImage(Position piecePosition, ImageView imageView){
+        for(Image image : images){
+            int index = images.indexOf(image);
+            if(image.getPosition().equals(piecePosition)){
+                image.setImageView(imageView);
+                images.set(index, image);
+            }
+        }
+    }
+
+    public void eraseImage(Position piecePosition){
+        replaceImage(piecePosition, null);
+    }
+
+    public ImageView getImageAtPosition(Position position){
+        for(Image image : images){
+            if(image.getPosition().equals(position)){
+                return image.getImageView();
+            }
+        }
+        return null;
+    }
+
+    public void update(Move move){
+
+    }
+
 
     public Move getLastMove() {
         return lastMove;

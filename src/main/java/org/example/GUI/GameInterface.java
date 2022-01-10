@@ -41,8 +41,7 @@ public class GameInterface {
     private GridPane hPane = new GridPane(), pane;
     private long start;
     private String gameMode = "PvA";
-    private HashMap<PiecePosition, ImageView> images1 = new HashMap<>();
-    private HashMap<PiecePosition, ImageView> images2 = new HashMap<>();
+
     private HashMap<ImageView, Rectangle> rectangles1 = new HashMap<>();
     private HashMap<ImageView, Rectangle> rectangles2 = new HashMap<>();
 
@@ -330,21 +329,21 @@ public class GameInterface {
 
                 if (piece != PieceType.NONE) {
                     ImageView pieceImage = new ImageView(Constants.getPiecePath(piece, currentPlayer.getColor()));
-                    images1.put(new PiecePosition(position, piece, currentPlayer.getColor()), pieceImage);
+                    currentPlayer.addImage(position, pieceImage);
                     rectangles1.put(pieceImage, rectangle);
                     hPane.add(pieceImage, j, i);
                 }
                 if (opponentPiece != PieceType.NONE) {
                     ImageView pieceImage = new ImageView(Constants.getPiecePath(opponentPiece, otherPlayer.getColor()));
-                    images2.put(new PiecePosition(position, opponentPiece, otherPlayer.getColor()), pieceImage);
+                    otherPlayer.addImage(position, pieceImage);
                     rectangles2.put(pieceImage, rectangle);
                     hPane.add(pieceImage, j, i);
                 }
-                if(piece == PieceType.NONE){
-                    images1.put(new PiecePosition(position, piece, currentPlayer.getColor()), null);
+                if (piece == PieceType.NONE) {
+                    currentPlayer.addImage(position, null);
                 }
-                if(opponentPiece == PieceType.NONE){
-                    images2.put(new PiecePosition(position, opponentPiece, otherPlayer.getColor()), null);
+                if (opponentPiece == PieceType.NONE) {
+                    otherPlayer.addImage(position, null);
 
                 }
             }
@@ -415,30 +414,27 @@ public class GameInterface {
 
 
     public void movePiece(Move move, Player player) {
+
         if (player instanceof IntelligentPlayer && game.getOtherPlayer(player) instanceof IntelligentPlayer) {
-            ImageView piece;
-            PiecePosition piecePosition;
+            Position piecePosition;
             int i = 9 - move.getTarget().getNumber();
             int j = move.getTarget().getLetter() - 'A' + 1;
-            if (player.getColor().equals("white")) {
-                piecePosition = new PiecePosition(move.getInitial(), move.getPieceType(), player.getColor());
-                piece = Util.getImageView(images1, piecePosition);
-                images1.put(piecePosition,null);
-                images1.put(new PiecePosition(move.getTarget(),move.getPieceType(),player.getColor()),piece);
-            } else {
-                piecePosition = new PiecePosition(move.getInitial(), move.getPieceType(), player.getColor());
-                piece = Util.getImageView(images2, piecePosition);
-                images2.put(piecePosition,null);
-                images2.put(new PiecePosition(move.getTarget(),move.getPieceType(),player.getColor()),piece);
+            piecePosition = move.getInitial();
+            ImageView piece = player.getImageAtPosition(piecePosition);
+            player.eraseImage(piecePosition);
+            player.replaceImage(move.getTarget(), piece);
+            if(piece == null){
+                System.out.println("AICIIII " + piecePosition.print());
+
             }
             Board board = player.getBoard();
-            board.replace(move);
-            player.setBoard(board);
+            Board newBoard = new Board(board.getPosition());
+            newBoard.replace(move);
+            player.setBoard(newBoard);
 
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("here");
                     hPane.getChildren().remove(piece);
                     hPane.add(piece, j, i);
                 }
@@ -449,6 +445,38 @@ public class GameInterface {
             board.replace(move);
             player.setBoard(board);
         }
+
+
+    }
+
+    private static int getC(HashMap<PiecePosition, ImageView> images) {
+        int count = 0;
+        for (Map.Entry<PiecePosition, ImageView> h : images.entrySet()) {
+            if (h.getValue() != null) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void removePiece(Position piecePosition, Player defendedPlayer, Move move) {
+
+          ImageView piece = defendedPlayer.getImageAtPosition(piecePosition);
+          defendedPlayer.eraseImage(piecePosition);
+
+        Board board = defendedPlayer.getBoard();
+        Board newBoard = new Board(board.getPosition());
+        newBoard = board.delete(new PiecePosition(move.getTarget(), move.getPieceType()));
+        defendedPlayer.setBoard(newBoard);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                hPane.getChildren().remove(piece);
+            }
+        });
+
+
 
 
     }

@@ -32,6 +32,13 @@ public class Move {
         this.thisBoard = thisBoard;
     }
 
+    public void setThisBoard(Board thisBoard){
+        this.thisBoard = thisBoard;
+    }
+
+    public void setEnemyBoard(Board enemyBoard){
+        this.enemyBoard = enemyBoard;
+    }
 
     public PieceType getPieceType() {
         return pieceType;
@@ -45,8 +52,13 @@ public class Move {
         return target;
     }
     public boolean refisMoveLegal() {
+//        List<PiecePosition> conf = thisBoard.getConfiguration();
+//        for(PiecePosition c : conf){
+//            if(c.getPieceType() != null){
+//                System.out.println(c.getPosition().print() + " " + c.getPieceType().toString());
+//            }
+//        }
         if(thisBoard.getPieceAtPosition(this.getTarget()) != PieceType.NONE){
-            System.out.println(thisBoard.getPieceAtPosition(this.getTarget()).toString());
             return false;
         }
         switch (pieceType) {
@@ -115,6 +127,17 @@ public class Move {
         return false;
     }
 
+    public static Position isCheck(Board enemyBoard, Move move){
+        Position target = move.getTarget();
+        System.out.println(target.print());
+        if(enemyBoard.getPieceAtPosition(target) != PieceType.NONE){
+            System.out.println(enemyBoard.getPieceAtPosition(target).toString());
+            //enemyBoard.replace(new Move(target, target, PieceType.NONE, enemyBoard));
+            return target;
+        }
+        return null;
+    }
+
     public boolean isMoveLegal() {
         if(this.thisBoard.getPieceAtPosition(this.getTarget()) != PieceType.NONE){
             return false;
@@ -126,7 +149,7 @@ public class Move {
              * to make a special move, known as castling.
              */
             case KING: {
-                //+castling
+                //+castling = rocada rege cu tura
                 return (getDistance() == 1);
             }
 
