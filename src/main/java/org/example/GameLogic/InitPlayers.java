@@ -31,8 +31,8 @@ public class InitPlayers {
 
 
 
-        game.addPlayer(intelligentPlayer1);
         game.addPlayer(intelligentPlayer);
+        game.addPlayer(intelligentPlayer1);
     }
 
 
