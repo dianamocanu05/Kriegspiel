@@ -13,7 +13,6 @@ public class MCTS {
     //4. backpropagation
 
     private Node root;
-    private int k=0;
     private Move lastMove = null;
     public MCTS(Node root){
         this.root = root;
