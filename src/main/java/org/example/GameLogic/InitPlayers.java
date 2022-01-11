@@ -19,18 +19,20 @@ public class InitPlayers {
     }
 
     public static void initAvA(Game game){
+        Board board1 = new Board("DOWN");
         IntelligentPlayer intelligentPlayer = new IntelligentPlayer("Emperor Napoleon", "white");
-        intelligentPlayer.setBoard(new Board("DOWN"));
+        intelligentPlayer.setBoard(board1);
         intelligentPlayer.setGame(game);
 
+        Board board2 = new Board("UP");
         IntelligentPlayer intelligentPlayer1 = new IntelligentPlayer("Marshall Kutuzov", "black");
-        intelligentPlayer1.setBoard(new Board("UP"));
+        intelligentPlayer1.setBoard(board2);
         intelligentPlayer1.setGame(game);
 
 
 
-        game.addPlayer(intelligentPlayer);
         game.addPlayer(intelligentPlayer1);
+        game.addPlayer(intelligentPlayer);
     }
 
 

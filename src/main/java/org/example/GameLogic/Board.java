@@ -13,7 +13,7 @@ public class Board {
         this.position = position;
         if(position.equals("DOWN")) {
             initialConfiguration();
-        }else{
+        }else if(position.equals("UP")){
             initialConfigurationUp();
         }
     }

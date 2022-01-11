@@ -52,7 +52,12 @@ public class Move {
         return target;
     }
     public boolean refisMoveLegal() {
-
+        if(thisBoard.getPieceAtPosition(this.getInitial()) == PieceType.NONE){
+            return false;
+        }
+        if(this.pieceType == PieceType.NONE){
+            return false;
+        }
         if(thisBoard.getPieceAtPosition(this.getTarget()) != PieceType.NONE){
             return false;
         }
@@ -124,7 +129,6 @@ public class Move {
 
     public static Position isCheck(Board enemyBoard, Move move){
         Position target = move.getTarget();
-        System.out.println(target.print());
         if(enemyBoard.getPieceAtPosition(target) != PieceType.NONE){
             System.out.println(enemyBoard.getPieceAtPosition(target).toString());
             //enemyBoard.replace(new Move(target, target, PieceType.NONE, enemyBoard));
@@ -202,7 +206,7 @@ public class Move {
                 }
             }
         }
-        return false;
+        return isCheck(enemyBoard, this) != null;
     }
 
     /**
@@ -389,7 +393,6 @@ public class Move {
         if (diagonalDirections.contains(direction)){
             List<Position> positions = computeContainedPositions(initial, target, direction);
             for(Position position : positions){
-                System.out.println(position.print());
                 if(board.getPieceAtPosition(position) != PieceType.NONE){
                     return true;
                 }

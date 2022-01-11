@@ -7,7 +7,7 @@ public class Node {
     private State state;
     private List<Node> children;
     private int nSampled;
-    private int winningScore;//????
+    private int winningScore =0;
     private Node parent = null;
     public Node(State state, Node parent){
         this.state =state;
@@ -45,5 +45,9 @@ public class Node {
 
     public Node getParent(){
         return parent;
+    }
+
+    public void setWinningScore(int winningScore){
+        this.winningScore +=winningScore;
     }
 }

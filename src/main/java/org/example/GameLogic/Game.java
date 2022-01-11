@@ -87,19 +87,22 @@ public class Game {
         while (name == null) {
             name = GUI.getPlayerName();
         }
-
         Move move = currentPlayer.getLastMove();
         move.print();
         String message = referee.announce(currentPlayer, move);
         if(message.contains("YES") && currentPlayer instanceof IntelligentPlayer){
             GUI.movePiece(move,currentPlayer);
         }else if(message.contains("CAPTURE")){
-            GUI.movePiece(move,currentPlayer);
+            if(currentPlayer instanceof IntelligentPlayer) {
+                GUI.movePiece(move, currentPlayer);
+            }else{
+
+            }
             GUI.removePiece(move.getTarget(),getOtherPlayer(currentPlayer),move);
         }else if(message.contains("CHECK")){
             butlerMessage = Utils.addButlerMessage(GUI.getGamePane(), message);
-            Thread.sleep(1000);
-            return;
+            Thread.sleep(3000);
+            GUI.close();
         }
         logOutcome(message, move);
 

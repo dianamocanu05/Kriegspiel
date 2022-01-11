@@ -17,49 +17,21 @@ public abstract class Player implements Runnable {
     private Thread thread;
     protected Move lastMove;
     private Player opponent;
-    private List<Image> images= new ArrayList<>();
 
     public Player(String name, String color) {
         this.name = name;
         this.color = color;
     }
 
-    public void addImage(Position piecePosition, ImageView imageView){
-        this.images.add(new Image(piecePosition,imageView));
-    }
 
-    public void replaceImage(Position piecePosition, ImageView imageView){
-        for(Image image : this.images){
-            int index = this.images.indexOf(image);
-            if(image.getPosition().equals(piecePosition)){
-                image.setImageView(imageView);
-                this.images.set(index, image);
-            }
-        }
-    }
-
-    public void eraseImage(Position piecePosition){
-        replaceImage(piecePosition, new ImageView());
-    }
-
-    public ImageView getImageAtPosition(Position position){
-        for(Image image : images){
-            if(image.getPosition().equals(position)){
-                return image.getImageView();
-            }
-        }
-        return null;
-    }
-
-    public List<Image> getImages(){
-        return images;
-    }
 
     public void update(Move move){
 
     }
-
-
+    public abstract void addImage(Position piecePosition, ImageView imageView);
+    public abstract void eraseImage(Position piecePosition);
+    public abstract ImageView getImageAtPosition(Position position);
+    public abstract void replaceImage(Position piecePosition, ImageView imageView);
     public Move getLastMove() {
         return lastMove;
     }

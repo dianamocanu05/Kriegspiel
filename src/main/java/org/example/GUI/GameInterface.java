@@ -141,6 +141,10 @@ public class GameInterface {
         });
     }
 
+    public void close(){
+        new GameInterface(stage).initialize();
+    }
+
     public void gameInterface(Stage stage) throws InterruptedException {
         game.startGameMode(gameMode);
         this.currentPlayer = game.getCurrentPlayer();
@@ -324,24 +328,25 @@ public class GameInterface {
 
                 Position position = new Position((char) ('A' + j - 1), 9 - i);
                 PieceType piece = currentPlayer.getBoard().getPieceAtPosition(position);
-                PieceType opponentPiece = otherPlayer.getBoard().getPieceAtPosition(position);
-                //System.out.println(opponentPiece.toString() + " " + position.print());
-
                 if (piece != PieceType.NONE) {
                     ImageView pieceImage = new ImageView(Constants.getPiecePath(piece, currentPlayer.getColor()));
                     currentPlayer.addImage(position, pieceImage);
                     rectangles1.put(pieceImage, rectangle);
                     hPane.add(pieceImage, j, i);
                 }
+                if (piece.equals(PieceType.NONE)) {
+                    currentPlayer.addImage(position, new ImageView());
+                }
+
+
+                PieceType opponentPiece = otherPlayer.getBoard().getPieceAtPosition(position);
                 if (opponentPiece != PieceType.NONE) {
                     ImageView pieceImage = new ImageView(Constants.getPiecePath(opponentPiece, otherPlayer.getColor()));
                     otherPlayer.addImage(position, pieceImage);
                     rectangles2.put(pieceImage, rectangle);
                     hPane.add(pieceImage, j, i);
                 }
-                if (piece.equals(PieceType.NONE)) {
-                    currentPlayer.addImage(position, new ImageView());
-                }
+
                 if (opponentPiece.equals(PieceType.NONE)) {
                     otherPlayer.addImage(position, new ImageView());
 
@@ -423,7 +428,7 @@ public class GameInterface {
             piecePosition = move.getInitial();
 
             Board board = player.getBoard();
-            Board newBoard = new Board(board.getPosition());
+            Board newBoard;
             newBoard = board.replace(move);
             player.setBoard(newBoard);
 

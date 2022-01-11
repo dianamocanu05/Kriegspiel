@@ -12,11 +12,21 @@ public class State {
     private List<Move> availableMoves;
     private int value;
     private Move creatorMove;
+    private Board opponentBoard;
+    private boolean terminal;
 
     public State(Board board, Move creatorMove) {
         this.board = board;
         this.creatorMove = creatorMove;
         this.availableMoves = new ArrayList<>();
+    }
+
+    public void setOpponentBoard(Board opponentBoard){
+        this.opponentBoard = opponentBoard;
+    }
+
+    public Board getOpponentBoard(){
+        return opponentBoard;
     }
 
 
@@ -45,9 +55,11 @@ public class State {
     }
 
 
+    public void setTerminal(){
+        this.terminal = true;
+    }
 
-    //?????
-    public boolean isTerminal(int k) {
-        return k == 5;
+    public boolean isTerminal() {
+        return terminal;
     }
 }

@@ -1,6 +1,7 @@
 package org.example.GameLogic.Algorithms;
 
 import org.example.GameLogic.Move;
+import org.example.GameLogic.Players.Referee;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -41,6 +42,8 @@ public class MCTS {
                 Node newNode = new Node(newState, currentNode);
                 currentNode.addChild(newNode);
             }
+            currentNode.setWinningScore(evaluator(currentNode.getState()));
+            backpropagate(currentNode);
             currentNode = currentNode.getChildren().get(0);
             currentNode.incrementNSample();
             state = rollout(currentNode.getState());
@@ -49,7 +52,7 @@ public class MCTS {
     }
 
     public State rollout(State state){
-        if(state.isTerminal(k++)){
+        if(state.isTerminal()){
             return state;
         }
 
@@ -61,6 +64,14 @@ public class MCTS {
     public State simulate(State state, Move action){
         lastMove = action;
         return Utils.makeAction(state, action);
+    }
+
+    public void backpropagate(Node node){
+        Node parent = node.getParent();
+        while(parent != null){
+            parent.setWinningScore(node.getWinningScore());
+            parent = parent.getParent();
+        }
     }
 
 
@@ -91,6 +102,22 @@ public class MCTS {
     public static Move getRandomAction(List<Move> actions){
         int len = actions.size();
         return actions.get(ThreadLocalRandom.current().nextInt(0, len));
+    }
+
+    public int evaluator(State state){
+
+        if(state.getCreatorMove() == null){
+            return 0;
+        }
+        Referee referee = new Referee();
+        String feedback = referee.announce(state, state.getCreatorMove());
+        if(feedback.equals("CHECK")){
+            return +1000;
+        }else if(feedback.equals("CAPTURE")){
+            return +500;
+        }else{
+            return -10;
+        }
     }
 
 
