@@ -1,6 +1,7 @@
 # KRIEGSPIEL (BERKELEY)
 
-
+## RUNNING
+In order to run the project, the maven dependencies in pom.xml have to be installed. No other difficulties should arise.
 
 ## TASK
 
