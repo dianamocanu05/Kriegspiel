@@ -9,6 +9,9 @@ import org.example.GameLogic.Algorithms.State;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * AI powered Player
+ */
 public class IntelligentPlayer extends Player{
     private List<Image> images= new ArrayList<>();
 

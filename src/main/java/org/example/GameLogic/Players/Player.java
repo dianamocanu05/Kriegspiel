@@ -8,6 +8,10 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Player interface to be inherited by the two types of player
+ * Each player runs on it's separate thread
+ */
 public abstract class Player implements Runnable {
 
     private String name;

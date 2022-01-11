@@ -87,16 +87,19 @@ public class Game {
         while (name == null) {
             name = GUI.getPlayerName();
         }
+        //get current move
         Move move = currentPlayer.getLastMove();
         move.print();
+
+        //announce move feedback
         String message = referee.announce(currentPlayer, move);
+
+        //make GUI perform action accordingly (move piece, delete piece)
         if(message.contains("YES") && currentPlayer instanceof IntelligentPlayer){
             GUI.movePiece(move,currentPlayer);
         }else if(message.contains("CAPTURE")){
             if(currentPlayer instanceof IntelligentPlayer) {
                 GUI.movePiece(move, currentPlayer);
-            }else{
-
             }
             GUI.removePiece(move.getTarget(),getOtherPlayer(currentPlayer),move);
         }else if(message.contains("CHECK")){
@@ -104,6 +107,7 @@ public class Game {
             Thread.sleep(3000);
             GUI.close();
         }
+        //logging in the 'War Chronicle' panel
         logOutcome(message, move);
 
         Utils.updateHistory(GUI.getHistory(), logger);
@@ -112,6 +116,7 @@ public class Game {
         Utils.removeNameText(name, GUI.getGamePane());
         Utils.removeButlerMessage(GUI.getGamePane(), butlerMessage);
 
+        //switch player
         switchPlayer();
         name = Utils.addNameText(currentPlayer.getName(), GUI.getGamePane());
 

@@ -7,6 +7,9 @@ import org.example.GameLogic.PiecePosition;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State represents the configuration of the board at a given instant
+ */
 public class State {
     private Board board;
     private List<Move> availableMoves;

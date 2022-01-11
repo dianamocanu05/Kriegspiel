@@ -93,6 +93,7 @@ public class MCTS {
         return lastMove;
     }
 
+    //upper confidence bound 1 formula
     private static double ucb1(Node node){
         double log = Math.log(node.getParent().getnSampled())/Math.log(Math.E);
         return node.getWinningScore() + 2 * (Math.sqrt(log/node.getnSampled()));
@@ -103,6 +104,7 @@ public class MCTS {
         return actions.get(ThreadLocalRandom.current().nextInt(0, len));
     }
 
+    //rewards
     public int evaluator(State state){
 
         if(state.getCreatorMove() == null){

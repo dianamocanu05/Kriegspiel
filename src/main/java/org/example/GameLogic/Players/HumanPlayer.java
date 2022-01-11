@@ -6,6 +6,9 @@ import org.example.GameLogic.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Human Player
+ */
 public class HumanPlayer extends Player {
     private List<Image> images= new ArrayList<>();
     private Move attemptedMove;

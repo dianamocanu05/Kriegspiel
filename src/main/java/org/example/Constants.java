@@ -4,6 +4,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.example.GameLogic.PieceType;
 
+/**
+ * Various media files and constants needed
+ */
 public class Constants {
     //ENV
     private static final int HEIGHT = 675;

@@ -5,6 +5,10 @@ import org.example.GameLogic.Players.IntelligentPlayer;
 
 public class InitPlayers {
 
+    /**
+     * Initialize players : human vs ai
+     * @param game
+     */
     public static void initPvA(Game game){
         HumanPlayer humanPlayer = new HumanPlayer("Emperor Napoleon", "white");
         humanPlayer.setBoard(new Board("DOWN"));
@@ -18,6 +22,10 @@ public class InitPlayers {
         game.addPlayer(intelligentPlayer);
     }
 
+    /**
+     * Initialize players : ai vs ai
+     * @param game
+     */
     public static void initAvA(Game game){
         Board board1 = new Board("DOWN");
         IntelligentPlayer intelligentPlayer = new IntelligentPlayer("Emperor Napoleon", "white");

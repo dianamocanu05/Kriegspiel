@@ -15,6 +15,7 @@ public class Move {
     private Player player;
     private static final List<String> diagonalDirections = Arrays.asList("RIGHT_UP", "RIGHT_DOWN", "LEFT_UP", "LEFT_DOWN");
     private static final List<String> horizVerticalDirections = Arrays.asList("RIGHT", "LEFT", "UP", "DOWN");
+
     public Move(Position initial, Position target, PieceType pieceType, Board thisBoard,Board enemyBoard, Player player) {
         this.thisBoard = thisBoard;
         this.initial = initial;
@@ -51,6 +52,11 @@ public class Move {
     public Position getTarget() {
         return target;
     }
+
+    /**
+     * Checks the validity of moves given the well known behaviour of each type of chess piece
+     * @return
+     */
     public boolean refisMoveLegal() {
         if(thisBoard.getPieceAtPosition(this.getInitial()) == PieceType.NONE){
             return false;
@@ -127,6 +133,12 @@ public class Move {
         return false;
     }
 
+    /**
+     * Checks for check
+     * @param enemyBoard
+     * @param move
+     * @return
+     */
     public static Position isCheck(Board enemyBoard, Move move){
         Position target = move.getTarget();
         if(enemyBoard.getPieceAtPosition(target) != PieceType.NONE){
@@ -137,6 +149,10 @@ public class Move {
         return null;
     }
 
+    /**
+     * Idem refisMoveLegal
+     * @return
+     */
     public boolean isMoveLegal() {
         if(this.thisBoard.getPieceAtPosition(this.getTarget()) != PieceType.NONE){
             return false;
@@ -210,7 +226,7 @@ public class Move {
     }
 
     /**
-     * Work in progress
+     * Computing distance between two positions on a board
      */
     private int getDistance() {
         char initialLetter = initial.getLetter();
@@ -230,6 +246,11 @@ public class Move {
         return -1;
     }
 
+    /**
+     * Computing positions which are situated diagonally in relation to current position
+     * @param position
+     * @return
+     */
     private List<Position> getDiagonals(Position position){
         char letter = position.getLetter();
         int number = position.getNumber();
@@ -266,6 +287,10 @@ public class Move {
         return position.getLetter() >= 'A' && position.getLetter() <= 'H' && position.getNumber() >= 1 && position.getNumber() <= 8;
     }
 
+    /**
+     * Computing direction of the move
+     * @return
+     */
     public String computeDirection() {
         if (initial.getNumber() == target.getNumber()) { //HORIZONTALLY
             if (initial.getLetter() - 'A' < target.getLetter() - 'A') {
@@ -298,29 +323,11 @@ public class Move {
                 }
             }
         }
-//        int delta = initial.getLetter() - target.getLetter();
-//        if (delta < 0) {
-//            if (initial.getNumber() - target.getNumber() == delta) {
-//                return "RIGHT_UP";
-//            }
-//            if (initial.getNumber() - target.getNumber() == -1 * delta) {
-//                return "RIGHT_DOWN";
-//            }
-//        } else {
-//            if (initial.getNumber() - target.getNumber() == delta) {
-//                return "LEFT_UP";
-//            }
-//            if (initial.getNumber() - target.getNumber() == -1 * delta) {
-//                return "LEFT_DOWN";
-//            }
-//        }
 
         return null;
     }
 
-    /*private boolean isJump(){
-        return isJumpOverPiece(player.getBoard());
-    }*/
+
 
     private boolean isJump(Board board){
         return isJumpOverPiece(board);
@@ -331,6 +338,11 @@ public class Move {
     }
 
 
+    /**
+     * Check if move implies jumping over pieces
+     * @param board
+     * @return
+     */
     private boolean isJumpOverPiece(Board board) {
         String direction = computeDirection();
         if (direction == null){
@@ -404,6 +416,13 @@ public class Move {
         return false;
     }
 
+    /**
+     * Compute the positions spanning from the initial position and target position of the move
+     * @param initial
+     * @param target
+     * @param direction
+     * @return
+     */
     public List<Position> computeContainedPositions(Position initial, Position target, String direction){
         char initialLetter = initial.getLetter();
         int initialNumber = initial.getNumber();
@@ -463,6 +482,10 @@ public class Move {
         return positions;
     }
 
+    /**
+     * Check if move is a L Move(knight)
+     * @return
+     */
     private boolean isLMove() {
         int initialNumber = initial.getNumber();
         char initialLetter = initial.getLetter();
@@ -472,39 +495,24 @@ public class Move {
         int delta = (initialLetter - targetLetter) * (initialNumber - targetNumber);
         return ((delta == 2) || (delta == -2));
 
-        /*
-        if((initialLetter - targetLetter == 1) && (initialNumber - targetNumber == -2)){
-            return true;
-        }
-        if((initialLetter - targetLetter == 2) && (initialNumber - targetNumber == -1)){
-            return true;
-        }
-        if((initialLetter - targetLetter == 2) && (initialNumber - targetNumber == 1)){
-            return true;
-        }
-        if((initialLetter - targetLetter == 1) && (initialNumber - targetNumber == 2)){
-            return true;
-        }
-        if((initialLetter - targetLetter == -1) && (initialNumber - targetNumber == 2)){
-            return true;
-        }
-        if((initialLetter - targetLetter == -1) && (initialNumber - targetNumber == -2)){
-            return true;
-        }
-        if((initialLetter - targetLetter == -2) && (initialNumber - targetNumber == -1)){
-            return true;
-        }
-        if((initialLetter - targetLetter == -2) && (initialNumber - targetNumber == 1)){
-            return true;
-        }
-        */
 
     }
 
+    /**
+     * Check if pawn hasn't been moved
+     * @param position
+     * @return
+     */
     private boolean isNotChanged(Position position) {
         return position.getNumber() == 2;
     }
 
+    /**
+     * Checks for pawn capture
+     * @param pawnPosition
+     * @param target
+     * @return
+     */
     private boolean isPawnCapture(Position pawnPosition, Position target){
         char letter = pawnPosition.getLetter();
         int number = pawnPosition.getNumber();

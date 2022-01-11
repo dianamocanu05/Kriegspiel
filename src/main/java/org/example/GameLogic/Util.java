@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Deprecated util functions
+ */
 public class Util {
 
     public static ImageView getImageView(HashMap<PiecePosition, ImageView> images, PiecePosition piecePosition){

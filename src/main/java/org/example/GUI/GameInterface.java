@@ -71,6 +71,9 @@ public class GameInterface {
         return gameMode;
     }
 
+    /**
+     * Home screen
+     */
     public void initScreen() {
         stackPane = new StackPane();
         //Utilss.playMusic(stackPane, Constants.getAudio1());
@@ -145,6 +148,11 @@ public class GameInterface {
         new GameInterface(stage).initialize();
     }
 
+    /**
+     * Human v AI game interface
+     * @param stage
+     * @throws InterruptedException
+     */
     public void gameInterface(Stage stage) throws InterruptedException {
         game.startGameMode(gameMode);
         this.currentPlayer = game.getCurrentPlayer();
@@ -221,6 +229,10 @@ public class GameInterface {
     }
 
 
+    /**
+     * GUI Construct chess board
+     * @param stackPane
+     */
     public void createChessBoard(StackPane stackPane) {
 
         int count = 0;
@@ -283,6 +295,10 @@ public class GameInterface {
     }
 
 
+    /**
+     * GUI construct both chess board (for ai v ai mode)
+     * @param stackPane
+     */
     private void createChessBoards(StackPane stackPane) {
         pane = new GridPane();
 
@@ -362,6 +378,12 @@ public class GameInterface {
     }
 
 
+    /**
+     * Mouse listener for pieces
+     * @param imageView
+     * @param pieceType
+     * @param pane
+     */
     private void addPieceMouseListener(ImageView imageView, PieceType pieceType, GridPane pane) {
         imageView.setOnMousePressed(mouseEvent -> {
             initial = getTargetRectangle(mouseEvent.getSceneX(), mouseEvent.getSceneY());
@@ -393,6 +415,11 @@ public class GameInterface {
         return (currentPlayer.getBoard().getPieceAtPosition(position) == PieceType.NONE);
     }
 
+    /**
+     * Mapping between the graphical representation of the chess positions and the positions themselves
+     * @param rectangle
+     * @return
+     */
     private Position computePosition(Rectangle rectangle) {
         int i = GridPane.getRowIndex(rectangle);
         int j = GridPane.getColumnIndex(rectangle);
@@ -410,6 +437,13 @@ public class GameInterface {
         return new Move(oldPosition, newPosition, pieceType, currentPlayer.getBoard(), currentPlayer.getOpponent().getBoard(), currentPlayer);
     }
 
+    /**
+     * move piece graphically
+     * @param pieceType
+     * @param piece
+     * @param pane
+     * @param target
+     */
     public void movePiece(PieceType pieceType, ImageView piece, GridPane pane, Rectangle target) {
         int i = GridPane.getRowIndex(target);
         int j = GridPane.getColumnIndex(target);
@@ -419,6 +453,11 @@ public class GameInterface {
     }
 
 
+    /**
+     * move piece in ai v ai mode
+     * @param move
+     * @param player
+     */
     public void movePiece(Move move, Player player) {
 
         if (player instanceof IntelligentPlayer && game.getOtherPlayer(player) instanceof IntelligentPlayer) {
@@ -453,15 +492,6 @@ public class GameInterface {
 
     }
 
-    private static int getC(List<Image> images) {
-        int count = 0;
-        for (Image h : images) {
-            if (h.getImageView() != null) {
-                count++;
-            }
-        }
-        return count;
-    }
 
     public void removePiece(Position piecePosition, Player defendedPlayer, Move move) {
 

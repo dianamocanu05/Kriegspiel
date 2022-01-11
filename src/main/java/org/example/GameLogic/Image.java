@@ -2,6 +2,9 @@ package org.example.GameLogic;
 
 import javafx.scene.image.ImageView;
 
+/**
+ * Image represents the image of a chess piece mapped to it's corresponding current position
+ */
 public class Image {
     private Position position;
     private ImageView imageView;

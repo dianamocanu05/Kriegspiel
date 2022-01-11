@@ -40,6 +40,9 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Various GUI util function
+ */
 public class Utils {
 
     private static StringBuilder notes = new StringBuilder();

@@ -1,5 +1,8 @@
 package org.example.GameLogic;
 
+/**
+ * PiecePosition represents the mapping between a piece and a position on the board
+ */
 public class PiecePosition {
     private Position position;
     private PieceType pieceType;

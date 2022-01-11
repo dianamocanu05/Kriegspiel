@@ -3,6 +3,9 @@ package org.example.GameLogic.Players;
 import org.example.GameLogic.*;
 import org.example.GameLogic.Algorithms.State;
 
+/**
+ * Referee checks the validity of moves and sends feedback
+ */
 public class Referee {
     private boolean lastOk;
     private State state;

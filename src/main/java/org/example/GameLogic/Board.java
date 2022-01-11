@@ -5,6 +5,9 @@ import javafx.geometry.Pos;
 import java.time.Period;
 import java.util.*;
 
+/**
+ * Board contains the configuration of a chess board(one player)
+ */
 public class Board {
     private List<PiecePosition> configurationDOWN = new ArrayList<>();
     private List<PiecePosition> configurationUP = new ArrayList<>();

@@ -7,7 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Various util functions
+ */
 public class Utils {
+    /**
+     * Execute action and observe feedback
+     * @param state current state
+     * @param action current action
+     * @return new state
+     */
     public static State makeAction(State state, Move action) {
         Board board = state.getBoard();
         Referee referee = new Referee();
