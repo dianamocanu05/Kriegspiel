@@ -339,15 +339,16 @@ public class GameInterface {
                     rectangles2.put(pieceImage, rectangle);
                     hPane.add(pieceImage, j, i);
                 }
-                if (piece == PieceType.NONE) {
-                    currentPlayer.addImage(position, null);
+                if (piece.equals(PieceType.NONE)) {
+                    currentPlayer.addImage(position, new ImageView());
                 }
-                if (opponentPiece == PieceType.NONE) {
-                    otherPlayer.addImage(position, null);
+                if (opponentPiece.equals(PieceType.NONE)) {
+                    otherPlayer.addImage(position, new ImageView());
 
                 }
             }
         }
+
 
         hPane.setGridLinesVisible(true);
         hPane.setAlignment(Pos.CENTER);
@@ -420,17 +421,15 @@ public class GameInterface {
             int i = 9 - move.getTarget().getNumber();
             int j = move.getTarget().getLetter() - 'A' + 1;
             piecePosition = move.getInitial();
+
+            Board board = player.getBoard();
+            Board newBoard = new Board(board.getPosition());
+            newBoard = board.replace(move);
+            player.setBoard(newBoard);
+
             ImageView piece = player.getImageAtPosition(piecePosition);
             player.eraseImage(piecePosition);
             player.replaceImage(move.getTarget(), piece);
-            if(piece == null){
-                System.out.println("AICIIII " + piecePosition.print());
-
-            }
-            Board board = player.getBoard();
-            Board newBoard = new Board(board.getPosition());
-            newBoard.replace(move);
-            player.setBoard(newBoard);
 
             Platform.runLater(new Runnable() {
                 @Override
@@ -449,10 +448,10 @@ public class GameInterface {
 
     }
 
-    private static int getC(HashMap<PiecePosition, ImageView> images) {
+    private static int getC(List<Image> images) {
         int count = 0;
-        for (Map.Entry<PiecePosition, ImageView> h : images.entrySet()) {
-            if (h.getValue() != null) {
+        for (Image h : images) {
+            if (h.getImageView() != null) {
                 count++;
             }
         }
@@ -465,7 +464,7 @@ public class GameInterface {
           defendedPlayer.eraseImage(piecePosition);
 
         Board board = defendedPlayer.getBoard();
-        Board newBoard = new Board(board.getPosition());
+        Board newBoard;
         newBoard = board.delete(new PiecePosition(move.getTarget(), move.getPieceType()));
         defendedPlayer.setBoard(newBoard);
 

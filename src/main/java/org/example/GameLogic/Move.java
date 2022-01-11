@@ -52,12 +52,7 @@ public class Move {
         return target;
     }
     public boolean refisMoveLegal() {
-//        List<PiecePosition> conf = thisBoard.getConfiguration();
-//        for(PiecePosition c : conf){
-//            if(c.getPieceType() != null){
-//                System.out.println(c.getPosition().print() + " " + c.getPieceType().toString());
-//            }
-//        }
+
         if(thisBoard.getPieceAtPosition(this.getTarget()) != PieceType.NONE){
             return false;
         }
@@ -231,6 +226,42 @@ public class Move {
         return -1;
     }
 
+    private List<Position> getDiagonals(Position position){
+        char letter = position.getLetter();
+        int number = position.getNumber();
+        List<Position> diagonals = new ArrayList<>();
+        //x+k, y+k
+        //x+k, y-k
+        //x-k, y+k
+        //x-k, y-k
+        for(int k=1;k<=8;k++){
+            Position diag = new Position((char) (letter + k), number + k);
+            if(legalPosition(diag)){
+                diagonals.add(diag);
+            }
+
+            diag = new Position((char) (letter + k), number - k);
+            if(legalPosition(diag)){
+                diagonals.add(diag);
+            }
+
+            diag = new Position((char) (letter - k), number + k);
+            if(legalPosition(diag)){
+                diagonals.add(diag);
+            }
+
+            diag = new Position((char) (letter - k), number - k);
+            if(legalPosition(diag)){
+                diagonals.add(diag);
+            }
+        }
+        return diagonals;
+    }
+
+    private boolean legalPosition(Position position){
+        return position.getLetter() >= 'A' && position.getLetter() <= 'H' && position.getNumber() >= 1 && position.getNumber() <= 8;
+    }
+
     public String computeDirection() {
         if (initial.getNumber() == target.getNumber()) { //HORIZONTALLY
             if (initial.getLetter() - 'A' < target.getLetter() - 'A') {
@@ -246,22 +277,39 @@ public class Move {
             return "DOWN";
         }
 
-        int delta = initial.getLetter() - target.getLetter();
-        if (delta > 0) {
-            if (initial.getNumber() - target.getNumber() == delta) {
-                return "RIGHT_UP";
-            }
-            if (initial.getNumber() - target.getNumber() == -1 * delta) {
-                return "RIGHT_DOWN";
-            }
-        } else {
-            if (initial.getNumber() - target.getNumber() == delta) {
-                return "LEFT_UP";
-            }
-            if (initial.getNumber() - target.getNumber() == -1 * delta) {
-                return "LEFT_DOWN";
+        List<Position> diagonals = getDiagonals(initial);
+        for(Position p : diagonals){
+            if(p.equals(target)){
+                if(target.getNumber() - initial.getNumber() > 0 && target.getLetter() - initial.getLetter() > 0){
+                    return "RIGHT_UP";
+                }
+                if(target.getNumber() - initial.getNumber() < 0 && target.getLetter() - initial.getLetter() > 0){
+                    return "RIGHT_DOWN";
+                }
+                if(target.getNumber() - initial.getNumber() > 0 && target.getLetter() - initial.getLetter() < 0){
+                    return "LEFT_UP";
+                }
+                if(target.getNumber() - initial.getNumber() < 0 && target.getLetter() - initial.getLetter() < 0){
+                    return "LEFT_DOWN";
+                }
             }
         }
+//        int delta = initial.getLetter() - target.getLetter();
+//        if (delta < 0) {
+//            if (initial.getNumber() - target.getNumber() == delta) {
+//                return "RIGHT_UP";
+//            }
+//            if (initial.getNumber() - target.getNumber() == -1 * delta) {
+//                return "RIGHT_DOWN";
+//            }
+//        } else {
+//            if (initial.getNumber() - target.getNumber() == delta) {
+//                return "LEFT_UP";
+//            }
+//            if (initial.getNumber() - target.getNumber() == -1 * delta) {
+//                return "LEFT_DOWN";
+//            }
+//        }
 
         return null;
     }
@@ -339,8 +387,9 @@ public class Move {
 
         }
         if (diagonalDirections.contains(direction)){
-            List<Position> positions = computeContainedPositions(initial, target);
+            List<Position> positions = computeContainedPositions(initial, target, direction);
             for(Position position : positions){
+                System.out.println(position.print());
                 if(board.getPieceAtPosition(position) != PieceType.NONE){
                     return true;
                 }
@@ -352,17 +401,60 @@ public class Move {
         return false;
     }
 
-    private List<Position> computeContainedPositions(Position initial, Position target){
+    public List<Position> computeContainedPositions(Position initial, Position target, String direction){
         char initialLetter = initial.getLetter();
+        int initialNumber = initial.getNumber();
         char targetLetter = target.getLetter();
 
         List<Position> positions = new ArrayList<>();
 
-        char letter = (char) (Math.min(initialLetter - 'A',targetLetter - 'A') + 'A');
-        if(letter == initialLetter){
-            for(letter = (char) (initialLetter+1); letter<targetLetter; letter++){
-                Position position = new Position(letter, initialLetter - letter);
-                positions.add(position);
+        switch (direction){
+            case "RIGHT_UP":{
+
+                int delta = targetLetter - initialLetter;
+                if(delta<0){
+                    delta*=-1;
+                }
+                for(int i=1;i<delta;i++){
+                    positions.add(new Position((char) (initialLetter+i), initialNumber+i));
+                }
+                return positions;
+            }
+
+            case "RIGHT_DOWN":{
+
+                int delta = targetLetter - initialLetter;
+                if(delta<0){
+                    delta*=-1;
+                }
+                for(int i=1;i<delta;i++){
+                    positions.add(new Position((char) (initialLetter+i), initialNumber-i));
+                }
+                return positions;
+            }
+
+            case "LEFT_UP":{
+
+                int delta = targetLetter - initialLetter;
+                if(delta<0){
+                    delta*=-1;
+                }
+                for(int i=1;i<delta;i++){
+                    positions.add(new Position((char) (initialLetter-i), initialNumber+i));
+                }
+                return positions;
+            }
+
+            case "LEFT_DOWN":{
+
+                int delta = targetLetter - initialLetter;
+                if(delta<0){
+                    delta*=-1;
+                }
+                for(int i=1;i<delta;i++){
+                    positions.add(new Position((char) (initialLetter-i), initialNumber-i));
+                }
+                return positions;
             }
         }
         return positions;

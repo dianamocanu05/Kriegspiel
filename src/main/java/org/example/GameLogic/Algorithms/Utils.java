@@ -41,7 +41,7 @@ public class Utils {
             Position position = piecePosition.getPosition();
             for (Position possiblePosition : allPositions) {
                 Move possibleMove = new Move(position, possiblePosition, pieceType, state.getBoard());
-                if (possibleMove.isMoveLegal()) {
+                if (possibleMove.refisMoveLegal()) {
                     availableMoves.add(possibleMove);
                 }
             }

@@ -94,8 +94,12 @@ public class Game {
         if(message.contains("YES") && currentPlayer instanceof IntelligentPlayer){
             GUI.movePiece(move,currentPlayer);
         }else if(message.contains("CAPTURE")){
-            GUI.removePiece(move.getTarget(),getOtherPlayer(currentPlayer),move);
             GUI.movePiece(move,currentPlayer);
+            GUI.removePiece(move.getTarget(),getOtherPlayer(currentPlayer),move);
+        }else if(message.contains("CHECK")){
+            butlerMessage = Utils.addButlerMessage(GUI.getGamePane(), message);
+            Thread.sleep(1000);
+            return;
         }
         logOutcome(message, move);
 

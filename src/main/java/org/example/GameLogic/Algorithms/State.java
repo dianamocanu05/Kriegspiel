@@ -18,10 +18,7 @@ public class State {
         this.creatorMove = creatorMove;
         this.availableMoves = new ArrayList<>();
     }
-    //?????
-    public boolean isTerminal(int k) {
-        return k == 5;
-    }
+
 
 
 
@@ -45,5 +42,12 @@ public class State {
                 System.out.println(piecePosition.getPieceType().toString() + " " + piecePosition.getPosition().print());
             }
         }
+    }
+
+
+
+    //?????
+    public boolean isTerminal(int k) {
+        return k == 5;
     }
 }

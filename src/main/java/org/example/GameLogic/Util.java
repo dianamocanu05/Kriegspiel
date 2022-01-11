@@ -3,6 +3,7 @@ package org.example.GameLogic;
 import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -17,6 +18,23 @@ public class Util {
         }
 
         return null;
+    }
+
+
+    public static boolean isEq(List<Image> images, List<PiecePosition> pp){
+        for(Image i : images){
+            for(PiecePosition p : pp){
+                if(i.getPosition().equals(p.getPosition())){
+                    if(i.getImageView() == null && !p.getPieceType().equals(PieceType.NONE)){
+                        return false;
+                    }
+                    if(i.getImageView() != null && p.getPieceType().equals(PieceType.NONE)){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 

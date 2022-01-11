@@ -4,10 +4,8 @@ import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import org.example.GameLogic.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class Player implements Runnable {
@@ -31,17 +29,17 @@ public abstract class Player implements Runnable {
     }
 
     public void replaceImage(Position piecePosition, ImageView imageView){
-        for(Image image : images){
-            int index = images.indexOf(image);
+        for(Image image : this.images){
+            int index = this.images.indexOf(image);
             if(image.getPosition().equals(piecePosition)){
                 image.setImageView(imageView);
-                images.set(index, image);
+                this.images.set(index, image);
             }
         }
     }
 
     public void eraseImage(Position piecePosition){
-        replaceImage(piecePosition, null);
+        replaceImage(piecePosition, new ImageView());
     }
 
     public ImageView getImageAtPosition(Position position){
@@ -51,6 +49,10 @@ public abstract class Player implements Runnable {
             }
         }
         return null;
+    }
+
+    public List<Image> getImages(){
+        return images;
     }
 
     public void update(Move move){

@@ -8,13 +8,16 @@ import org.example.GameLogic.Players.Player;
 import org.example.GameLogic.Players.Referee;
 import org.example.GameLogic.Position;
 
+import java.util.List;
+
 public class Main2 {
 
     public static void main(String[] args){
-//        Referee referee = new Referee();
-//        Player player = new IntelligentPlayer("hey", "white");
-//        player.setBoard(new Board("DOWN"));
-//        Move move = new Move(new Position('E',2),new Position('E',4),PieceType.PAWN,player.getBoard());
-//        System.out.println(referee.announce(player,move));
+    Board board = new Board("DOWN");
+    Move move = new Move(new Position('A',8), new Position('D',5), PieceType.QUEEN, board);
+    List<Position> c = move.computeContainedPositions(move.getInitial(), move.getTarget(), move.computeDirection());
+    for(Position position : c){
+        System.out.println(position.print());
+    }
     }
 }

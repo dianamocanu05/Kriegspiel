@@ -1,9 +1,6 @@
 package org.example.GameLogic.Players;
 
-import org.example.GameLogic.Board;
-import org.example.GameLogic.Game;
-import org.example.GameLogic.Move;
-import org.example.GameLogic.Position;
+import org.example.GameLogic.*;
 
 public class Referee {
     private boolean lastOk;
@@ -18,6 +15,9 @@ public class Referee {
         if(currentPlayer instanceof HumanPlayer) {
             Position position = Move.isCheck(game.getOtherPlayer(currentPlayer).getBoard(),attemptedMove);
             if(position != null){
+                if(attemptedMove.getPieceType().equals(PieceType.KING)){
+                    return "CHECK";
+                }
                 return "CAPTURE AT " + position.print();
             }
             if (lastOk) {
@@ -28,6 +28,9 @@ public class Referee {
             Position position = Move.isCheck(game.getOtherPlayer(currentPlayer).getBoard(),attemptedMove);
 
             if(position != null){
+                if(attemptedMove.getPieceType().equals(PieceType.KING)){
+                    return "CHECK";
+                }
                 return "CAPTURE AT " + position.print();
             }
             if(attemptedMove.refisMoveLegal()){
